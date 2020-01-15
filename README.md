@@ -1,8 +1,7 @@
 # duoduo_cat
 
-A new Flutter project.
 
-## Getting Started
+## Links
 
 This project is a starting point for a Flutter application.
 
