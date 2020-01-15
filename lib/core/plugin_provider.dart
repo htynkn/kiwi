@@ -1,4 +1,4 @@
-import 'domain/plugin_info.dart';
+import '../domain/plugin_info.dart';
 
 abstract class PluginProvider {
   Future<List<PluginInfo>> search(String keyword);

@@ -12,6 +12,7 @@ class HomePageState implements Cloneable<HomePageState> {
 HomePageState initState(Map<String, dynamic> args) {
   final HomePageState state = HomePageState();
 
-  state.name = "姓名";
+  state.name = "我";
+  
   return state;
 }

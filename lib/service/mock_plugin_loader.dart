@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:duoduo_cat/domain/plugin.dart';
 
-import '../plugin_loader.dart';
+import '../core/plugin_loader.dart';
 
 class MockPluginLoader extends PluginLoader {
   @override

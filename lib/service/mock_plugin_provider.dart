@@ -1,4 +1,4 @@
-import '../plugin_provider.dart';
+import '../core/plugin_provider.dart';
 
 class MockPluginProvider extends PluginProvider {
   @override
