@@ -9,6 +9,8 @@ import 'package:get_it/get_it.dart';
 void main() {
   group("sited_plugin_provider_test", () {
     setUpAll(() {
+      GetIt.I.reset();
+      
       var loader = GetIt.I;
 
       loader.registerSingleton<LoggingService>(new SimpleLoggingService());

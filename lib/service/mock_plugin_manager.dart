@@ -19,7 +19,7 @@ class MockPluginManager extends PluginManager {
   }
 
   @override
-  Future<void> install(PluginInfo info, String xmlContent) {
+  Future<int> install(PluginInfo info, String xmlContent) async {
     // TODO: implement install
     return null;
   }

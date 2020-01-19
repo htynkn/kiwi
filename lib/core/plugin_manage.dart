@@ -7,5 +7,5 @@ import '../domain/plugin.dart';
 abstract class PluginManager {
   Future<List<Plugin>> load();
   Future<void> refresh();
-  Future<void> install(PluginInfo info, String xmlContent);
+  Future<int> install(PluginInfo info, String xmlContent);
 }
