@@ -13,6 +13,6 @@ HomePageState initState(Map<String, dynamic> args) {
   final HomePageState state = HomePageState();
 
   state.name = "我";
-  
+
   return state;
 }
