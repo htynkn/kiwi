@@ -1,9 +1,22 @@
+import 'package:duoduo_cat/service/dio_http_service.dart';
+import 'package:duoduo_cat/service/simple_logging_service.dart';
+import 'package:duoduo_cat/service/sited_plugin_provider.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
+import 'package:get_it/get_it.dart';
 
+import 'core/http_service.dart';
+import 'core/logging_service.dart';
+import 'core/plugin_provider.dart';
 import 'page/home/page.dart';
 
 Widget createApp() {
+  var loader = GetIt.I;
+
+  loader.registerLazySingleton<LoggingService>(() => SimpleLoggingService());
+  loader.registerLazySingleton<HttpService>(() => DioHttpService());
+  loader.registerLazySingleton<PluginProvider>(() => SitedPluginProvider());
+
   final AbstractRoutes routes = PageRoutes(
     pages: <String, Page<Object, dynamic>>{
       'home': HomePage(),
@@ -27,7 +40,7 @@ Widget createApp() {
   );
 
   return MaterialApp(
-    title: 'Flutter App',
+    title: 'App',
     debugShowCheckedModeBanner: false,
     theme: ThemeData(
       primarySwatch: Colors.blue,

@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:duoduo_cat/core/logging_service.dart';
-import 'package:duoduo_cat/core/plugin_manage.dart';
+import 'package:duoduo_cat/core/plugin_manager.dart';
 import 'package:duoduo_cat/domain/dao/plugin_db_object.dart';
+import 'package:duoduo_cat/domain/enum/plugin_type.dart';
 import 'package:duoduo_cat/domain/plugin.dart';
 import 'package:duoduo_cat/domain/plugin_info.dart';
 import 'package:get_it/get_it.dart';
@@ -49,6 +50,7 @@ class DefaultPluginManager extends PluginManager {
 
     var key = await store.add(db, pluginDbObject.toJson());
 
+    logging.debug("new installed plugin id $key");
     return Future.value(key);
   }
 
@@ -58,6 +60,7 @@ class DefaultPluginManager extends PluginManager {
     var store = intMapStoreFactory.store('plugins');
 
     var result = await store.find(db);
+    logging.debug("load plugins from db as $result");
 
     List<Plugin> plugins = List();
 
@@ -75,5 +78,22 @@ class DefaultPluginManager extends PluginManager {
   @override
   Future<void> refresh() {
     return null;
+  }
+
+  @override
+  getById(int id) async {
+    var db = await openDB();
+
+    var store = intMapStoreFactory.store('plugins');
+    var result = await store.findFirst(db,
+        finder: Finder(filter: Filter.equals(Field.key, id)));
+
+    var pluginDbObject = PluginDbObject.fromJson(result.value);
+
+    var plugin = Plugin(result.key, pluginDbObject.name);
+    plugin.pluginType = PluginType.COMIC;
+    plugin.content = pluginDbObject.content;
+
+    return plugin;
   }
 }

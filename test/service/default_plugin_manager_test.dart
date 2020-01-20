@@ -7,6 +7,7 @@ import 'package:duoduo_cat/service/simple_logging_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scratch_space/scratch_space.dart';
+import '../util/test_util.dart';
 
 void main() {
   group("default_plugin_manager", () {
@@ -34,13 +35,7 @@ void main() {
       expect(list, isNotNull);
       expect(list.length, equals(0));
 
-      String basePath = "test/test_resources/";
-      if (File(".").absolute.toString().contains("test")) {
-        basePath = "test_resources/";
-      }
-
-      final file = File("${basePath}default_plugin.xml");
-      var fileContent = await file.readAsString();
+      var fileContent = await TestUtil.loadFile("default_plugin.xml");
       var result =
           await manager.install(PluginInfo("漫画堆-手机版", ""), fileContent);
 
@@ -60,13 +55,7 @@ void main() {
       expect(list, isNotNull);
       expect(list.length, equals(0));
 
-      String basePath = "test/test_resources/";
-      if (File(".").absolute.toString().contains("test")) {
-        basePath = "test_resources/";
-      }
-
-      final file = File("${basePath}default_plugin.xml");
-      var fileContent = await file.readAsString();
+      var fileContent = await TestUtil.loadFile("default_plugin.xml");
       var result =
           await manager.install(PluginInfo("漫画堆-手机版", ""), fileContent);
 
@@ -85,6 +74,26 @@ void main() {
       list = await manager.load();
 
       expect(list.length, equals(1));
+    });
+
+    test("test_get_by_id", () async {
+      var manager = DefaultPluginManager(tempDir);
+
+      var list = await manager.load();
+
+      expect(list, isNotNull);
+      expect(list.length, equals(0));
+
+      var fileContent = await TestUtil.loadFile("default_plugin.xml");
+      var result =
+          await manager.install(PluginInfo("漫画堆-手机版", ""), fileContent);
+
+      expect(result, greaterThan(0));
+
+      var plugin = await manager.getById(result);
+
+      expect(plugin.id, equals(result));
+      expect(plugin.name, equals("漫画堆-手机版"));
     });
   });
 }

@@ -8,4 +8,5 @@ abstract class PluginManager {
   Future<List<Plugin>> load();
   Future<void> refresh();
   Future<int> install(PluginInfo info, String xmlContent);
+  Future<Plugin> getById(int id);
 }
