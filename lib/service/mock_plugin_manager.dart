@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:duoduo_cat/core/plugin_manager.dart';
-import 'package:duoduo_cat/domain/plugin.dart';
-import 'package:duoduo_cat/domain/plugin_info.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/domain/plugin.dart';
+import 'package:kiwi/domain/plugin_info.dart';
 
 class MockPluginManager extends PluginManager {
   @override

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:duoduo_cat/core/http_service.dart';
-import 'package:duoduo_cat/core/logging_service.dart';
+import 'package:kiwi/core/http_service.dart';
+import 'package:kiwi/core/logging_service.dart';
 import 'package:get_it/get_it.dart';
 
 class DioHttpService extends HttpService {

@@ -1,5 +1,5 @@
-import 'package:duoduo_cat/page/home/effect.dart';
-import 'package:duoduo_cat/page/home/reducer.dart';
+import 'package:kiwi/page/home/effect.dart';
+import 'package:kiwi/page/home/reducer.dart';
 import 'package:fish_redux/fish_redux.dart';
 
 import 'state.dart';

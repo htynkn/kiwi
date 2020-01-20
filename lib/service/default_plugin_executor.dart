@@ -1,5 +1,5 @@
-import 'package:duoduo_cat/core/plugin_manager.dart';
-import 'package:duoduo_cat/domain/raw_plugin_info.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/domain/raw_plugin_info.dart';
 import 'package:get_it/get_it.dart';
 import 'package:xml/xml.dart' as xml;
 

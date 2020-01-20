@@ -1,4 +1,4 @@
-package com.example.duoduo_cat
+package com.huangyunkun.kiwi
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

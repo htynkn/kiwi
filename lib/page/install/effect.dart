@@ -1,8 +1,8 @@
-import 'package:duoduo_cat/core/logging_service.dart';
-import 'package:duoduo_cat/core/plugin_manager.dart';
-import 'package:duoduo_cat/core/plugin_provider.dart';
-import 'package:duoduo_cat/domain/plugin_info.dart';
-import 'package:duoduo_cat/page/home/action.dart';
+import 'package:kiwi/core/logging_service.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/core/plugin_provider.dart';
+import 'package:kiwi/domain/plugin_info.dart';
+import 'package:kiwi/page/home/action.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:get_it/get_it.dart';

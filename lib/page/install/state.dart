@@ -1,4 +1,4 @@
-import 'package:duoduo_cat/domain/plugin_info.dart';
+import 'package:kiwi/domain/plugin_info.dart';
 import 'package:fish_redux/fish_redux.dart';
 
 class InstallState implements Cloneable<InstallState> {

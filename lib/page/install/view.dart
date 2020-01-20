@@ -1,4 +1,4 @@
-import 'package:duoduo_cat/page/install/action.dart';
+import 'package:kiwi/page/install/action.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:logger_flutter/logger_flutter.dart';

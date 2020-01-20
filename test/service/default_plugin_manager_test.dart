@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:duoduo_cat/core/logging_service.dart';
-import 'package:duoduo_cat/domain/plugin_info.dart';
-import 'package:duoduo_cat/service/default_plugin_manager.dart';
-import 'package:duoduo_cat/service/simple_logging_service.dart';
+import 'package:kiwi/core/logging_service.dart';
+import 'package:kiwi/domain/plugin_info.dart';
+import 'package:kiwi/service/default_plugin_manager.dart';
+import 'package:kiwi/service/simple_logging_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:scratch_space/scratch_space.dart';

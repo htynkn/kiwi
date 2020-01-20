@@ -176,6 +176,13 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.8"
+  firebase_analytics:
+    dependency: "direct main"
+    description:
+      name: firebase_analytics
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.0.9"
   fish_redux:
     dependency: "direct main"
     description:

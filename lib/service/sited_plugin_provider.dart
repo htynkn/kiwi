@@ -1,8 +1,8 @@
-import 'package:duoduo_cat/core/http_service.dart';
-import 'package:duoduo_cat/core/logging_service.dart';
-import 'package:duoduo_cat/core/plugin_provider.dart';
-import 'package:duoduo_cat/domain/plugin_info.dart';
-import 'package:duoduo_cat/exception/http_exception.dart';
+import 'package:kiwi/core/http_service.dart';
+import 'package:kiwi/core/logging_service.dart';
+import 'package:kiwi/core/plugin_provider.dart';
+import 'package:kiwi/domain/plugin_info.dart';
+import 'package:kiwi/exception/http_exception.dart';
 import 'package:get_it/get_it.dart';
 import 'package:html/parser.dart';
 import 'dart:convert';

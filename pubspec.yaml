@@ -1,4 +1,4 @@
-name: duoduo_cat
+name: kiwi
 description: Duoduo Cat
 
 version: 1.0.0+1
@@ -26,6 +26,7 @@ dependencies:
   json_annotation: ^3.0.1
   logger_flutter: ^0.7.1
   flutter_easyrefresh: ^2.0.8
+  firebase_analytics: ^5.0.9
 
   logger:
   crypto:

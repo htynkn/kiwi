@@ -1,9 +1,8 @@
-import 'package:duoduo_cat/domain/plugin.dart';
-import 'package:duoduo_cat/page/home/action.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:logger_flutter/logger_flutter.dart';
-
+import '../../domain/plugin.dart';
+import 'action.dart';
 import 'state.dart';
 
 Widget buildView(

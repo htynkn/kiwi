@@ -1,14 +1,7 @@
-import 'package:duoduo_cat/page/install/page.dart';
-import 'package:duoduo_cat/service/dio_http_service.dart';
-import 'package:duoduo_cat/service/simple_logging_service.dart';
-import 'package:duoduo_cat/service/sited_plugin_provider.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:get_it/get_it.dart';
+import 'package:kiwi/page/install/page.dart';
 
-import 'core/http_service.dart';
-import 'core/logging_service.dart';
-import 'core/plugin_provider.dart';
 import 'page/home/page.dart';
 
 Widget createApp() {

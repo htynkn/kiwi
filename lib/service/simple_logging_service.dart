@@ -1,4 +1,4 @@
-import 'package:duoduo_cat/core/logging_service.dart';
+import 'package:kiwi/core/logging_service.dart';
 import 'package:logger/logger.dart';
 
 class SimpleLoggingService extends LoggingService {
