@@ -5,10 +5,12 @@ import 'state.dart';
 
 Reducer<HomePageState> buildReducer() {
   return asReducer(
-    <Object, Reducer<HomePageState>>{HomeAction.load: _load},
+    <Object, Reducer<HomePageState>>{HomeAction.finishLoad: _finishLoad},
   );
 }
 
-HomePageState _load(HomePageState state, Action action) {
-  return state;
+HomePageState _finishLoad(HomePageState state, Action action) {
+  final newState = state.clone();
+  newState.plugins = action.payload;
+  return newState;
 }

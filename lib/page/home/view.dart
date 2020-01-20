@@ -1,3 +1,4 @@
+import 'package:duoduo_cat/domain/plugin.dart';
 import 'package:duoduo_cat/page/home/action.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
@@ -12,9 +13,7 @@ Widget buildView(
   var widgets = <Widget>[];
 
   for (var plugin in plugins) {
-    widgets.add(Container(
-      child: Text(plugin.name),
-    ));
+    widgets.add(pluginItemContainer(plugin));
   }
 
   widgets.add(GestureDetector(
@@ -45,4 +44,19 @@ Widget buildView(
           )),
         ),
       ));
+}
+
+Container pluginItemContainer(Plugin plugin) {
+  return Container(
+    padding: EdgeInsets.all(1),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30.0),
+        border: Border.all(
+            color: Colors.blue, width: 1.0, style: BorderStyle.solid)),
+    child: Row(
+      children: <Widget>[
+        Text(plugin.name),
+      ],
+    ),
+  );
 }

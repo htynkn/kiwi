@@ -2,6 +2,7 @@ import 'package:duoduo_cat/core/logging_service.dart';
 import 'package:duoduo_cat/core/plugin_manager.dart';
 import 'package:duoduo_cat/core/plugin_provider.dart';
 import 'package:duoduo_cat/domain/plugin_info.dart';
+import 'package:duoduo_cat/page/home/action.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:get_it/get_it.dart';
@@ -18,10 +19,8 @@ Effect<InstallState> buildEffect() {
 }
 
 _finishInstall(Action action, Context<InstallState> ctx) async {
-  Scaffold.of(ctx.context).showSnackBar(SnackBar(
-    content: Text("install plugin success id:${action.payload["id"]}"),
-  ));
   Navigator.of(ctx.context).pushNamed('home', arguments: null);
+  ctx.dispatch(HomeActionCreator.reload());
 }
 
 Future<void> _fetch(Action action, Context<InstallState> ctx) async {

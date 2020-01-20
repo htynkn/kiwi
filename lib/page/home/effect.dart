@@ -11,9 +11,15 @@ import 'state.dart';
 
 Effect<HomePageState> buildEffect() {
   return combineEffects(<Object, Effect<HomePageState>>{
-    Lifecycle.initState: _startLoad,
+    Lifecycle.initState: _init,
+    HomeAction.reload: _startLoad,
+    HomeAction.startLoad: _startLoad,
     HomeAction.jumpToInstall: _jumpToInstall
   });
+}
+
+_init(Action action, Context<HomePageState> ctx) {
+  ctx.dispatch(HomeActionCreator.startLoad());
 }
 
 Future<void> _startLoad(Action action, Context<HomePageState> ctx) async {
@@ -28,11 +34,10 @@ Future<void> _startLoad(Action action, Context<HomePageState> ctx) async {
     loader.registerSingleton<PluginManager>(pluginManager);
 
     var list = await pluginManager.load();
-    ctx.dispatch(HomeActionCreator.loadPlugin(list));
+    ctx.dispatch(HomeActionCreator.finishLoadPlugin(list));
   } else {
-    pluginManager.load().then((list) {
-      ctx.dispatch(HomeActionCreator.loadPlugin(list));
-    });
+    var list = await pluginManager.load();
+    ctx.dispatch(HomeActionCreator.finishLoadPlugin(list));
   }
 }
 

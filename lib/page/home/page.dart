@@ -11,5 +11,8 @@ class HomePage extends Page<HomePageState, Map<String, dynamic>> {
             initState: initState,
             view: buildView,
             reducer: buildReducer(),
-            effect: buildEffect());
+            effect: buildEffect(),
+            dependencies: Dependencies<HomePageState>(
+                adapter: null, slots: <String, Dependent<HomePageState>>{}),
+            middleware: <Middleware<HomePageState>>[]);
 }
