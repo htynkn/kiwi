@@ -1,3 +1,4 @@
+import 'package:duoduo_cat/page/home/action.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:logger_flutter/logger_flutter.dart';
@@ -16,9 +17,22 @@ Widget buildView(
     ));
   }
 
+  widgets.add(GestureDetector(
+    onTap: () {
+      dispatch(HomeActionCreator.jumpToInstall());
+    },
+    child: Center(
+        child: Icon(
+      Icons.add,
+      color: Colors.pink,
+      size: 24.0,
+      semanticLabel: 'click to install new plugin',
+    )),
+  ));
+
   return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: const Text('首页'),
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),

@@ -1,3 +1,4 @@
+import 'package:duoduo_cat/page/install/page.dart';
 import 'package:duoduo_cat/service/dio_http_service.dart';
 import 'package:duoduo_cat/service/simple_logging_service.dart';
 import 'package:duoduo_cat/service/sited_plugin_provider.dart';
@@ -11,15 +12,10 @@ import 'core/plugin_provider.dart';
 import 'page/home/page.dart';
 
 Widget createApp() {
-  var loader = GetIt.I;
-
-  loader.registerLazySingleton<LoggingService>(() => SimpleLoggingService());
-  loader.registerLazySingleton<HttpService>(() => DioHttpService());
-  loader.registerLazySingleton<PluginProvider>(() => SitedPluginProvider());
-
   final AbstractRoutes routes = PageRoutes(
     pages: <String, Page<Object, dynamic>>{
       'home': HomePage(),
+      'install': InstallPage(),
     },
     visitor: (String path, Page<Object, dynamic> page) {
       page.enhancer.append(
