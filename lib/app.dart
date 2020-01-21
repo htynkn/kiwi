@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:kiwi/page/install/page.dart';
+import 'package:kiwi/theme.dart';
 
 import 'page/home/page.dart';
 
@@ -29,11 +30,9 @@ Widget createApp() {
   );
 
   return MaterialApp(
-    title: 'App',
+    title: 'Kiwi',
     debugShowCheckedModeBanner: false,
-    theme: ThemeData(
-      primarySwatch: Colors.blue,
-    ),
+    theme: myTheme,
     home: routes.buildPage('home', null),
     onGenerateRoute: (RouteSettings settings) {
       return MaterialPageRoute<Object>(builder: (BuildContext context) {
