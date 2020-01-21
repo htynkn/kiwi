@@ -1,5 +1,3 @@
-import 'package:kiwi/service/default_plugin_executor.dart';
-
 class RawPluginInfo {
   int version;
   int engineVersion;
@@ -47,4 +45,9 @@ class RawPluginMainHostInfo {
   String method;
 
   String title;
+}
+
+class RawPluginScriptInfo {
+  List<String> requireList;
+  String code;
 }

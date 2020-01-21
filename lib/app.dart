@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
+import 'package:kiwi/page/comic_book/page.dart';
 import 'package:kiwi/page/install/page.dart';
 import 'package:kiwi/theme.dart';
 
@@ -10,6 +11,7 @@ Widget createApp() {
     pages: <String, Page<Object, dynamic>>{
       'home': HomePage(),
       'install': InstallPage(),
+      'comic_book': ComicBookPage(),
     },
     visitor: (String path, Page<Object, dynamic> page) {
       page.enhancer.append(

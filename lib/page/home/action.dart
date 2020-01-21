@@ -1,7 +1,7 @@
-import 'package:kiwi/domain/plugin.dart';
 import 'package:fish_redux/fish_redux.dart';
+import 'package:kiwi/domain/plugin.dart';
 
-enum HomeAction { finishLoad, jumpToInstall, reload, startLoad }
+enum HomeAction { finishLoad, jumpToInstall, reload, startLoad, clickBook }
 
 class HomeActionCreator {
   static Action finishLoadPlugin(List<Plugin> plugins) {
@@ -18,5 +18,9 @@ class HomeActionCreator {
 
   static Action startLoad() {
     return const Action(HomeAction.startLoad);
+  }
+
+  static Action clickBook(int pluginId) {
+    return Action(HomeAction.clickBook, payload: pluginId);
   }
 }

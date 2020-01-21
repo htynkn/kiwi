@@ -3,6 +3,7 @@ import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/domain/comic_book.dart';
 import 'package:kiwi/domain/raw_plugin_info.dart';
+import 'package:kiwi/service/js_engine_service.dart';
 import 'package:xml/xml.dart' as xml;
 
 class DefaultPluginExecutor {
@@ -72,14 +73,14 @@ class DefaultPluginExecutor {
     return Future.value(rawPluginInfo);
   }
 
-  Future<List<ComicBook>> getComicBooks(RawPluginInfo pluginInfo) {
+  Future<List<ComicBook>> getComicBooks(RawPluginInfo pluginInfo) async {
     var httpService = GetIt.I.get<HttpService>();
+
+    var jsEngineService = GetIt.I.get<JsEngineService>();
+
+    var result = await jsEngineService.executeJs(
+        "var c = function(a,b) { return a+b;}", "c(1,2)");
 
     return Future.value(List());
   }
-}
-
-class RawPluginScriptInfo {
-  List<String> requireList;
-  String code;
 }

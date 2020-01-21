@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:fish_redux/fish_redux.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/logging_service.dart';
@@ -9,10 +10,12 @@ class DioHttpService extends HttpService {
 
   @override
   get(String url) async {
-    final HttpMetric metric =
-        FirebasePerformance.instance.newHttpMetric(url, HttpMethod.Get);
+    var metric;
 
-    await metric.start();
+    if (!isDebug()) {
+      metric = FirebasePerformance.instance.newHttpMetric(url, HttpMethod.Get);
+      await metric.start();
+    }
 
     try {
       Response response = await Dio().get(url);
@@ -23,7 +26,9 @@ class DioHttpService extends HttpService {
     } catch (e) {
       throw e;
     } finally {
-      await metric.stop();
+      if (!isDebug()) {
+        await metric.stop();
+      }
     }
     throw Exception("返回值无效");
   }

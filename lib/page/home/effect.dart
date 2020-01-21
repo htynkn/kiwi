@@ -1,9 +1,9 @@
-import 'package:kiwi/core/plugin_manager.dart';
-import 'package:kiwi/service/default_plugin_manager.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/widgets.dart' hide Action;
 import 'package:get_it/get_it.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/service/default_plugin_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'action.dart';
@@ -14,8 +14,14 @@ Effect<HomePageState> buildEffect() {
     Lifecycle.initState: _init,
     HomeAction.reload: _startLoad,
     HomeAction.startLoad: _startLoad,
+    HomeAction.clickBook: _clickBook,
     HomeAction.jumpToInstall: _jumpToInstall
   });
+}
+
+_clickBook(Action action, Context<HomePageState> ctx) {
+  Navigator.of(ctx.context)
+      .pushNamed('comic_book', arguments: {"pluginId": action.payload});
 }
 
 _init(Action action, Context<HomePageState> ctx) {
