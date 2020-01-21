@@ -23,5 +23,5 @@ _startLoad(Action action, Context<ComicBookState> ctx) async {
 
   var list = await defaultPluginExecutor.getComicBooks(raw);
 
-  ctx.dispatch(ComicBookActionCreator.finishLoad(list));
+  ctx.dispatch(ComicBookActionCreator.finishLoad(raw.meta.title, list));
 }

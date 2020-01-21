@@ -3,12 +3,16 @@ import 'package:kiwi/domain/comic_book.dart';
 
 class ComicBookState implements Cloneable<ComicBookState> {
   int pluginId;
-
+  String name;
   List<ComicBook> comicBooks;
+  bool loading = true;
 
   @override
   ComicBookState clone() {
-    return ComicBookState()..pluginId = pluginId;
+    return ComicBookState()
+      ..pluginId = pluginId
+      ..name = name
+      ..comicBooks = comicBooks;
   }
 }
 
@@ -17,6 +21,7 @@ ComicBookState initState(Map<String, dynamic> args) {
 
   comicBookState.pluginId = args["pluginId"];
   comicBookState.comicBooks = List();
+  comicBookState.name = "";
 
   return comicBookState;
 }

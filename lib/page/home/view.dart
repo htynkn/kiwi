@@ -20,13 +20,22 @@ Widget buildView(
     onTap: () {
       dispatch(HomeActionCreator.jumpToInstall());
     },
-    child: Center(
-        child: Icon(
-      Icons.add,
-      color: Colors.pink,
-      size: 24.0,
-      semanticLabel: 'click to install new plugin',
-    )),
+    child: Container(
+      margin: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(30.0),
+          border: Border.all(
+              color: Theme.of(viewService.context).primaryColorDark,
+              width: 1.0,
+              style: BorderStyle.solid)),
+      child: Container(
+          child: Icon(
+        Icons.add,
+        color: Theme.of(viewService.context).primaryColorDark,
+        size: 30,
+        semanticLabel: 'click to install new plugin',
+      )),
+    ),
   ));
 
   return Scaffold(

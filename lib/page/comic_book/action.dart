@@ -8,7 +8,8 @@ class ComicBookActionCreator {
     return const Action(ComicBookAction.startLoad);
   }
 
-  static Action finishLoad(List<ComicBook> list) {
-    return Action(ComicBookAction.finishLoad, payload: list);
+  static Action finishLoad(String title, List<ComicBook> list) {
+    return Action(ComicBookAction.finishLoad,
+        payload: {"name": title, "books": list});
   }
 }

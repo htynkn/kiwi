@@ -8,4 +8,11 @@ class JsEngineService {
         .invokeMethod('executeJs', {"script": script, "method": method});
     return Future.value(result);
   }
+
+  Future<String> executeJsWithContext(
+      String script, String method, Map<String, dynamic> context) async {
+    final String result = await platform.invokeMethod('executeJsWithContext',
+        {"script": script, "method": method, "context": context});
+    return Future.value(result);
+  }
 }

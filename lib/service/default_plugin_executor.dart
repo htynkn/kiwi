@@ -1,9 +1,13 @@
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:get_it/get_it.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/domain/comic_book.dart';
 import 'package:kiwi/domain/raw_plugin_info.dart';
 import 'package:kiwi/service/js_engine_service.dart';
+import 'package:quiver/strings.dart';
 import 'package:xml/xml.dart' as xml;
 
 class DefaultPluginExecutor {
@@ -65,7 +69,7 @@ class DefaultPluginExecutor {
 
     rawPluginScriptInfo.requireList =
         script.findElements("require").first.findElements("item").map((f) {
-      f.getAttribute("url");
+      return f.getAttribute("url");
     }).toList();
 
     rawPluginInfo.script = rawPluginScriptInfo;
@@ -78,9 +82,32 @@ class DefaultPluginExecutor {
 
     var jsEngineService = GetIt.I.get<JsEngineService>();
 
-    var result = await jsEngineService.executeJs(
-        "var c = function(a,b) { return a+b;}", "c(1,2)");
+    var code = pluginInfo.script.code;
 
-    return Future.value(List());
+    for (var url in pluginInfo.script.requireList) {
+      var requireScript;
+      if (isNotEmpty(pluginInfo.meta.ua)) {
+        requireScript = await httpService.get(url, pluginInfo.meta.ua);
+      } else {
+        requireScript = await httpService.get(url);
+      }
+
+      code = requireScript + ";" + code;
+    }
+
+    var home = pluginInfo.main.home;
+
+    var html = await httpService.get(home.url);
+
+    Map<String, String> context = HashMap();
+    context.putIfAbsent("html", () => html);
+    context.putIfAbsent("url", () => home.url);
+
+    var result = await jsEngineService.executeJsWithContext(
+        code, home.parse + "(url,html)", context);
+
+    var books = ComicBook.fromJsonList(result);
+
+    return Future.value(books);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fish_redux/fish_redux.dart';
@@ -9,7 +11,9 @@ class DioHttpService extends HttpService {
   static final List<int> allowStatusCodeList = [200];
 
   @override
-  get(String url) async {
+  Future<String> get(String url,
+      [String ua =
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36"]) async {
     var metric;
 
     if (!isDebug()) {
@@ -18,8 +22,12 @@ class DioHttpService extends HttpService {
     }
 
     try {
-      Response response = await Dio().get(url);
+      var options = BaseOptions(headers: {HttpHeaders.userAgentHeader: ua});
+
+      Response response = await Dio(options).get(url);
+
       GetIt.I.get<LoggingService>().debug(response.toString());
+
       if (allowStatusCodeList.contains(response?.statusCode)) {
         return response.data?.toString();
       }

@@ -27,10 +27,12 @@ dependencies:
   logger_flutter: ^0.7.1
   firebase_analytics: ^5.0.9
   firebase_performance: ^0.3.1+5
+  liquid_progress_indicator: ^0.3.2
 
-  logger:
-  crypto:
-  xml:
+  quiver: any
+  logger: any
+  crypto: any
+  xml: any
 
 dev_dependencies:
   flutter_test:

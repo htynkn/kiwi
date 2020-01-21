@@ -23,6 +23,17 @@ class MainActivity : FlutterActivity() {
                 } else {
                     result.error("1", "invalid parameter", call.toString())
                 }
+            } else if (call.method == "executeJsWithContext") {
+                val wrapper = RhinoWrapper();
+                val script = call.argument<String>("script").orEmpty();
+                val method = call.argument<String>("method").orEmpty();
+                val context = call.argument<Map<String, Any>>("context").orEmpty();
+
+                if (script != "" && method != "") {
+                    result.success(wrapper.executeJsWithContext(script, method, context));
+                } else {
+                    result.error("1", "invalid parameter", call.toString())
+                }
             } else {
                 result.notImplemented()
             }

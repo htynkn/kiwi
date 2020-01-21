@@ -13,4 +13,18 @@ class RhinoWrapperTest {
 
         assertThat(result, CoreMatchers.`is`("3.0"));
     }
+
+    @Test
+    fun runWithContext() {
+        val rhinoWrapper = RhinoWrapper()
+
+        var map = HashMap<String, Any>();
+
+        map.put("x", 1);
+        map.put("y", 2);
+
+        val result = rhinoWrapper.executeJsWithContext("var c = function(a,b) { return a+b;}", "c(x,y)", map);
+
+        assertThat(result, CoreMatchers.`is`("3.0"));
+    }
 }

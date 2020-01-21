@@ -15,6 +15,7 @@ InstallState _onLoad(InstallState state, Action action) {
   final InstallState newState = state.clone();
 
   newState.pluginsInfo = action.payload;
+  newState.loading = false;
 
   return newState;
 }

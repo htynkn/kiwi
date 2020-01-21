@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:json_annotation/json_annotation.dart';
 
 part 'comic_book.g.dart';
@@ -14,4 +16,14 @@ class ComicBook {
 
   factory ComicBook.fromJson(Map<String, dynamic> json) =>
       _$ComicBookFromJson(json);
+
+  static fromJsonList(String jsonContent) {
+    List list = json.decode(jsonContent);
+
+    var books = list.map((f) {
+      return ComicBook.fromJson(f);
+    }).toList();
+
+    return books;
+  }
 }
