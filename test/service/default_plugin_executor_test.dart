@@ -41,21 +41,8 @@ void main() {
       var rawInfo = await executor.getRawInfoBy(result);
 
       expect(rawInfo.version, equals(18));
-    });
 
-    test("test_raw_info", () async {
-//      var executor = DefaultPluginExecutor();
-
-      var fileContent = await TestUtil.loadFile("default_plugin.xml");
-
-      var result = await GetIt.I
-          .get<PluginManager>()
-          .install(PluginInfo("漫画堆-手机版", ""), fileContent);
-
-      expect(result, greaterThan(0));
-
-//      var rawInfo = await executor.getRawInfoBy(result);
-//      String response = await executor.getHots(rawInfo);
+      expect(rawInfo.script.code, isNotEmpty);
     });
   });
 }

@@ -1,6 +1,8 @@
-import 'package:kiwi/core/plugin_manager.dart';
-import 'package:kiwi/domain/raw_plugin_info.dart';
 import 'package:get_it/get_it.dart';
+import 'package:kiwi/core/http_service.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/domain/comic_book.dart';
+import 'package:kiwi/domain/raw_plugin_info.dart';
 import 'package:xml/xml.dart' as xml;
 
 class DefaultPluginExecutor {
@@ -54,14 +56,30 @@ class DefaultPluginExecutor {
 
     rawPluginInfo.main.home = homeInfo;
 
-//    var script = sited.findElements("script").first;
+    var script = sited.findElements("script").first;
+
+    var rawPluginScriptInfo = RawPluginScriptInfo();
+
+    rawPluginScriptInfo.code = script.findElements("code").first.text;
+
+    rawPluginScriptInfo.requireList =
+        script.findElements("require").first.findElements("item").map((f) {
+      f.getAttribute("url");
+    }).toList();
+
+    rawPluginInfo.script = rawPluginScriptInfo;
 
     return Future.value(rawPluginInfo);
   }
 
-  Future<String> getHots(RawPluginInfo pluginInfo) {
-//    var httpService = GetIt.I.get<HttpService>();
+  Future<List<ComicBook>> getComicBooks(RawPluginInfo pluginInfo) {
+    var httpService = GetIt.I.get<HttpService>();
 
-    return Future.value("");
+    return Future.value(List());
   }
+}
+
+class RawPluginScriptInfo {
+  List<String> requireList;
+  String code;
 }

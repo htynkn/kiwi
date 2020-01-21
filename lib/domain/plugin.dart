@@ -1,4 +1,3 @@
-// for installed plugin
 import 'package:kiwi/domain/enum/plugin_type.dart';
 
 class Plugin {

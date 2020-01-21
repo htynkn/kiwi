@@ -1,3 +1,5 @@
+import 'package:kiwi/service/default_plugin_executor.dart';
+
 class RawPluginInfo {
   int version;
   int engineVersion;
@@ -7,6 +9,8 @@ class RawPluginInfo {
   RawPluginMetaInfo meta;
 
   RawPluginMainInfo main;
+
+  RawPluginScriptInfo script;
 }
 
 class RawPluginMetaInfo {
