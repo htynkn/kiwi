@@ -7,6 +7,8 @@ class RawPluginInfo {
   RawPluginMetaInfo meta;
 
   RawPluginMainInfo main;
+
+  RawPluginScriptInfo script;
 }
 
 class RawPluginMetaInfo {
@@ -43,4 +45,9 @@ class RawPluginMainHostInfo {
   String method;
 
   String title;
+}
+
+class RawPluginScriptInfo {
+  List<String> requireList;
+  String code;
 }

@@ -7,7 +7,7 @@ class TestUtil {
       basePath = "test_resources/";
     }
 
-    final file = File("${basePath}default_plugin.xml");
+    final file = File(basePath + fileName);
     var fileContent = await file.readAsString();
     return fileContent;
   }

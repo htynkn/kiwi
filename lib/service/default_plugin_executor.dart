@@ -1,6 +1,13 @@
-import 'package:kiwi/core/plugin_manager.dart';
-import 'package:kiwi/domain/raw_plugin_info.dart';
+import 'dart:collection';
+import 'dart:convert';
+
 import 'package:get_it/get_it.dart';
+import 'package:kiwi/core/http_service.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/domain/comic_book.dart';
+import 'package:kiwi/domain/raw_plugin_info.dart';
+import 'package:kiwi/service/js_engine_service.dart';
+import 'package:quiver/strings.dart';
 import 'package:xml/xml.dart' as xml;
 
 class DefaultPluginExecutor {
@@ -54,14 +61,53 @@ class DefaultPluginExecutor {
 
     rawPluginInfo.main.home = homeInfo;
 
-//    var script = sited.findElements("script").first;
+    var script = sited.findElements("script").first;
+
+    var rawPluginScriptInfo = RawPluginScriptInfo();
+
+    rawPluginScriptInfo.code = script.findElements("code").first.text;
+
+    rawPluginScriptInfo.requireList =
+        script.findElements("require").first.findElements("item").map((f) {
+      return f.getAttribute("url");
+    }).toList();
+
+    rawPluginInfo.script = rawPluginScriptInfo;
 
     return Future.value(rawPluginInfo);
   }
 
-  Future<String> getHots(RawPluginInfo pluginInfo) {
-//    var httpService = GetIt.I.get<HttpService>();
+  Future<List<ComicBook>> getComicBooks(RawPluginInfo pluginInfo) async {
+    var httpService = GetIt.I.get<HttpService>();
 
-    return Future.value("");
+    var jsEngineService = GetIt.I.get<JsEngineService>();
+
+    var code = pluginInfo.script.code;
+
+    for (var url in pluginInfo.script.requireList) {
+      var requireScript;
+      if (isNotEmpty(pluginInfo.meta.ua)) {
+        requireScript = await httpService.get(url, pluginInfo.meta.ua);
+      } else {
+        requireScript = await httpService.get(url);
+      }
+
+      code = requireScript + ";" + code;
+    }
+
+    var home = pluginInfo.main.home;
+
+    var html = await httpService.get(home.url);
+
+    Map<String, String> context = HashMap();
+    context.putIfAbsent("html", () => html);
+    context.putIfAbsent("url", () => home.url);
+
+    var result = await jsEngineService.executeJsWithContext(
+        code, home.parse + "(url,html)", context);
+
+    var books = ComicBook.fromJsonList(result);
+
+    return Future.value(books);
   }
 }

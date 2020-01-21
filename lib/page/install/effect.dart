@@ -1,11 +1,11 @@
+import 'package:fish_redux/fish_redux.dart';
+import 'package:flutter/material.dart' hide Action;
+import 'package:get_it/get_it.dart';
 import 'package:kiwi/core/logging_service.dart';
 import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/core/plugin_provider.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 import 'package:kiwi/page/home/action.dart';
-import 'package:fish_redux/fish_redux.dart';
-import 'package:flutter/material.dart' hide Action;
-import 'package:get_it/get_it.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -19,7 +19,7 @@ Effect<InstallState> buildEffect() {
 }
 
 _finishInstall(Action action, Context<InstallState> ctx) async {
-  Navigator.of(ctx.context).pushNamed('home', arguments: null);
+  Navigator.of(ctx.context).pushReplacementNamed('home', arguments: null);
   ctx.dispatch(HomeActionCreator.reload());
 }
 

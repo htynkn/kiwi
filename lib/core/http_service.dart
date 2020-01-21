@@ -1,3 +1,3 @@
 abstract class HttpService {
-  Future<String> get(String url);
+  Future<String> get(String url, [String ua]);
 }
