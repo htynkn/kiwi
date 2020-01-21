@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:duoduo_cat/domain/plugin_info.dart';
+import 'package:kiwi/domain/plugin_info.dart';
 
 import '../domain/plugin.dart';
 

@@ -1,6 +1,6 @@
-import 'package:duoduo_cat/service/dio_http_service.dart';
-import 'package:duoduo_cat/service/simple_logging_service.dart';
-import 'package:duoduo_cat/service/sited_plugin_provider.dart';
+import 'package:kiwi/service/dio_http_service.dart';
+import 'package:kiwi/service/simple_logging_service.dart';
+import 'package:kiwi/service/sited_plugin_provider.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:get_it/get_it.dart';
 

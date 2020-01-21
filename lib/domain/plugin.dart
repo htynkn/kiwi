@@ -1,5 +1,5 @@
 // for installed plugin
-import 'package:duoduo_cat/domain/enum/plugin_type.dart';
+import 'package:kiwi/domain/enum/plugin_type.dart';
 
 class Plugin {
   int id;

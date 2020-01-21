@@ -1,5 +1,5 @@
-import 'package:duoduo_cat/core/plugin_manager.dart';
-import 'package:duoduo_cat/service/default_plugin_manager.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/service/default_plugin_manager.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/widgets.dart' hide Action;

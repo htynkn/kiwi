@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:duoduo_cat/core/logging_service.dart';
-import 'package:duoduo_cat/core/plugin_manager.dart';
-import 'package:duoduo_cat/domain/dao/plugin_db_object.dart';
-import 'package:duoduo_cat/domain/enum/plugin_type.dart';
-import 'package:duoduo_cat/domain/plugin.dart';
-import 'package:duoduo_cat/domain/plugin_info.dart';
+import 'package:kiwi/core/logging_service.dart';
+import 'package:kiwi/core/plugin_manager.dart';
+import 'package:kiwi/domain/dao/plugin_db_object.dart';
+import 'package:kiwi/domain/enum/plugin_type.dart';
+import 'package:kiwi/domain/plugin.dart';
+import 'package:kiwi/domain/plugin_info.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
