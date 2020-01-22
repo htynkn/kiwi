@@ -33,6 +33,28 @@ class RawPluginMainInfo {
   int dtype;
 
   RawPluginMainHostInfo home;
+
+  RawPluginMainBookInfo book;
+
+  RawPluginMainSectionInfo section;
+}
+
+class RawPluginMainSectionInfo {
+  String cache;
+
+  String parse;
+
+  String method;
+}
+
+class RawPluginMainBookInfo {
+  String cache;
+
+  String parse;
+
+  String method;
+
+  String title;
 }
 
 class RawPluginMainHostInfo {

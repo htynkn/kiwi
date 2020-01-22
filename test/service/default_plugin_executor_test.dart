@@ -47,5 +47,33 @@ void main() {
       expect(rawInfo.script.requireList, isNotEmpty);
       expect(rawInfo.script.requireList[0], isNotEmpty);
     });
+
+    test("test_raw_info_issue_1", () async {
+      var executor = DefaultPluginExecutor();
+
+      var fileContent = await TestUtil.loadFile("issue_1_plugin.xml");
+
+      var result = await GetIt.I
+          .get<PluginManager>()
+          .install(PluginInfo("东方二次元", ""), fileContent);
+
+      expect(result, greaterThan(0));
+      var rawInfo = await executor.getRawInfoBy(result);
+
+      expect(rawInfo.version, equals(3));
+
+      expect(rawInfo.meta.title, equals("东方二次元"));
+
+      expect(rawInfo.script.code, isNotEmpty);
+
+      expect(rawInfo.script.requireList, isNotEmpty);
+      expect(rawInfo.script.requireList[0], isNotEmpty);
+
+      expect(rawInfo.main.book, isNotNull);
+      expect(rawInfo.main.book.method, isNotEmpty);
+
+      expect(rawInfo.main.section, isNotNull);
+      expect(rawInfo.main.section.parse, isNotEmpty);
+    });
   });
 }
