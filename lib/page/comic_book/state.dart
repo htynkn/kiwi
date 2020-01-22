@@ -12,6 +12,7 @@ class ComicBookState implements Cloneable<ComicBookState> {
     return ComicBookState()
       ..pluginId = pluginId
       ..name = name
+      ..loading = loading
       ..comicBooks = comicBooks;
   }
 }

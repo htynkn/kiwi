@@ -21,7 +21,9 @@ void initServiceLoader() {
   var loader = GetIt.I;
 
   loader.registerLazySingleton<LoggingService>(() => SimpleLoggingService());
-  loader.registerLazySingleton<HttpService>(() => DioHttpService());
+  loader.registerLazySingleton<HttpService>(() {
+    return DioHttpService();
+  });
   loader.registerLazySingleton<PluginProvider>(() => SitedPluginProvider());
 
   loader.registerLazySingleton<JsEngineService>(() => JsEngineService());

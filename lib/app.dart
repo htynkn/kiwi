@@ -1,10 +1,13 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:kiwi/page/comic_book/page.dart';
+import 'package:kiwi/page/comic_detail/page.dart';
 import 'package:kiwi/page/install/page.dart';
 import 'package:kiwi/theme.dart';
 
+import 'page/comic_section/page.dart';
 import 'page/home/page.dart';
+import 'page/comic_section/page.dart';
 
 Widget createApp() {
   final AbstractRoutes routes = PageRoutes(
@@ -12,6 +15,8 @@ Widget createApp() {
       'home': HomePage(),
       'install': InstallPage(),
       'comic_book': ComicBookPage(),
+      'comic_section': ComicSectionPage(),
+      'comic_detail': ComicDetailPage(),
     },
     visitor: (String path, Page<Object, dynamic> page) {
       page.enhancer.append(

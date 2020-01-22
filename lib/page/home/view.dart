@@ -29,12 +29,13 @@ Widget buildView(
               width: 1.0,
               style: BorderStyle.solid)),
       child: Container(
+          key: Key("home_button_install_plugin"),
           child: Icon(
-        Icons.add,
-        color: Theme.of(viewService.context).primaryColorDark,
-        size: 30,
-        semanticLabel: 'click to install new plugin',
-      )),
+            Icons.add,
+            color: Theme.of(viewService.context).primaryColorDark,
+            size: 30,
+            semanticLabel: 'click to install new plugin',
+          )),
     ),
   ));
 
