@@ -11,6 +11,8 @@ class ComicDetailState implements Cloneable<ComicDetailState> {
 
   Duration duration;
 
+  int currentPageIndex;
+
   @override
   ComicDetailState clone() {
     return ComicDetailState()
@@ -21,6 +23,7 @@ class ComicDetailState implements Cloneable<ComicDetailState> {
       ..ua = ua
       ..reference = reference
       ..duration = duration
+      ..currentPageIndex = currentPageIndex
       ..url = url;
   }
 }
@@ -32,6 +35,7 @@ ComicDetailState initState(Map<String, dynamic> args) {
   comicDetailState.url = args["url"];
   comicDetailState.loading = true;
   comicDetailState.sectionName = args["sectionName"];
+  comicDetailState.currentPageIndex = 1;
 
   return comicDetailState;
 }

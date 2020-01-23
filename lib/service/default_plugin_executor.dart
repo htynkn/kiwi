@@ -64,7 +64,7 @@ class DefaultPluginExecutor {
     var home = main.findElements("home").first;
 
     var homeInfo = RawPluginMainHostInfo();
-    var hots = _findFirstElement(home, "hots");
+    var hots = _findFirstElement(home, "hots", alias: "updates");
 
     homeInfo.cache = hots.getAttribute("cache");
     homeInfo.title = hots.getAttribute("title");
@@ -82,6 +82,19 @@ class DefaultPluginExecutor {
     bookInfo.title = book.getAttribute("title");
     bookInfo.method = book.getAttribute("method");
     bookInfo.parse = book.getAttribute("parse");
+    bookInfo.buildUrl = book.getAttribute("buildUrl");
+
+    if (this._hasElement(book, "sections")) {
+      var sections = this._findFirstElement(book, "sections");
+
+      var sectionsInfo = RawPluginMainSectionsInfo();
+
+      sectionsInfo.parseUrl = sections.getAttribute("parseUrl");
+      sectionsInfo.buildUrl = sections.getAttribute("buildUrl");
+      sectionsInfo.parse = sections.getAttribute("parse");
+
+      bookInfo.sections = sectionsInfo;
+    }
 
     rawPluginInfo.main.book = bookInfo;
 
@@ -156,6 +169,14 @@ class DefaultPluginExecutor {
 
     var book = pluginInfo.main.book;
 
+    if (isNotEmpty(book.buildUrl)) {
+      Map<String, String> context = HashMap();
+      context.putIfAbsent("url", () => url);
+
+      url = await jsEngineService.executeJsWithContext(
+          code, book.buildUrl + "(url)", context);
+    }
+
     var html = await httpService.get(url,
         ua: pluginInfo.meta.ua, duration: _getDuration(book.cache));
 
@@ -166,11 +187,57 @@ class DefaultPluginExecutor {
     var result = await jsEngineService.executeJsWithContext(
         code, book.parse + "(url,html)", context);
 
-    var section = ComicSection.fromJsonString(result);
+    var comicSection = ComicSection.fromJsonString(result);
 
-    section.pluginName = pluginInfo.meta.title;
+    comicSection.pluginName = pluginInfo.meta.title;
 
-    return Future.value(section);
+    if (comicSection.sections == null) {
+      comicSection.sections = List();
+    }
+
+    if (book.sections != null) {
+      if (isNotEmpty(book.sections.buildUrl)) {
+        Map<String, String> context = HashMap();
+        context.putIfAbsent("url", () => url);
+
+        url = await jsEngineService.executeJsWithContext(
+            code, book.sections.buildUrl + "(url)", context);
+      }
+
+      List<String> sectionsUrl = List();
+
+      if (isNotEmpty(book.sections.parseUrl)) {
+        var html = await httpService.get(url,
+            ua: pluginInfo.meta.ua, duration: _getDuration(book.cache));
+        Map<String, String> context = HashMap();
+        context.putIfAbsent("url", () => url);
+        context.putIfAbsent("html", () => html);
+
+        var tempResult = await jsEngineService.executeJsWithContext(
+            code, book.sections.parseUrl + "(url,html)", context);
+
+        sectionsUrl.addAll(tempResult.split(";"));
+      } else {
+        sectionsUrl.add(url);
+      }
+
+      for (var sectionUrl in sectionsUrl) {
+        var html = await httpService.get(sectionUrl,
+            ua: pluginInfo.meta.ua, duration: _getDuration(book.cache));
+        Map<String, String> context = HashMap();
+        context.putIfAbsent("url", () => sectionUrl);
+        context.putIfAbsent("html", () => html);
+
+        var tempResult = await jsEngineService.executeJsWithContext(
+            code, book.sections.parse + "(url,html)", context);
+
+        var tempSection = ComicSection.fromJsonString(tempResult);
+
+        comicSection.sections.addAll(tempSection.sections);
+      }
+    }
+
+    return Future.value(comicSection);
   }
 
   Future<ComicDetail> getComicDetails(

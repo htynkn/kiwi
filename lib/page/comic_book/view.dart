@@ -2,6 +2,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kiwi/component/loading.dart';
 import 'package:kiwi/domain/comic_book.dart';
 import 'package:kiwi/page/comic_book/action.dart';
@@ -16,14 +17,29 @@ Widget buildView(
   var books = state.comicBooks;
   var theme = Theme.of(viewService.context);
 
-  return Scaffold(
-      appBar: AppBar(
-        title: Text(state.name),
-        backgroundColor: theme.primaryColor,
-      ),
-      body: state.loading
-          ? Loading.normalLoading(viewService)
-          : renderComicBooks(state, books, theme, viewService, dispatch));
+  return WillPopScope(
+    onWillPop: () async {
+      if (state.loading) {
+        Fluttertoast.showToast(
+            msg: "加载中，请耐心等待",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 1,
+            backgroundColor: Theme.of(viewService.context).backgroundColor,
+            fontSize: 16.0);
+        return Future.value(false);
+      }
+      return Future.value(true);
+    },
+    child: Scaffold(
+        appBar: AppBar(
+          title: Text(state.name),
+          backgroundColor: theme.primaryColor,
+        ),
+        body: state.loading
+            ? Loading.normalLoading(viewService)
+            : renderComicBooks(state, books, theme, viewService, dispatch)),
+  );
 }
 
 Container renderComicBooks(ComicBookState state, List<ComicBook> books,
@@ -46,9 +62,8 @@ Container renderComicBooks(ComicBookState state, List<ComicBook> books,
                 child: Container(
                   padding: EdgeInsets.only(top: 20),
                   child: TransitionToImage(
-                      image: AdvancedNetworkImage(
-                        book.logo,
-                      ),
+                      image:
+                          AdvancedNetworkImage(book.logo, useDiskCache: true),
                       width: constraints.maxWidth - 30,
                       height: constraints.maxWidth / ratio - 60,
                       placeholder: CircularProgressIndicator()),

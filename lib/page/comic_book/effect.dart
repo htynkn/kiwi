@@ -15,7 +15,9 @@ Effect<ComicBookState> buildEffect() {
 }
 
 _init(Action action, Context<ComicBookState> ctx) {
-  ctx.dispatch(ComicBookActionCreator.startLoad());
+  Future.delayed(Duration(milliseconds: 100), () {
+    ctx.dispatch(ComicBookActionCreator.startLoad());
+  });
 }
 
 _jumpToSection(Action action, Context<ComicBookState> ctx) {
@@ -26,9 +28,9 @@ _jumpToSection(Action action, Context<ComicBookState> ctx) {
 _startLoad(Action action, Context<ComicBookState> ctx) async {
   var defaultPluginExecutor = GetIt.I.get<DefaultPluginExecutor>();
 
-  var raw = await defaultPluginExecutor.getRawInfoBy(ctx.state.pluginId);
-
-  var list = await defaultPluginExecutor.getComicBooks(raw);
-
-  ctx.dispatch(ComicBookActionCreator.finishLoad(raw.meta.title, list));
+  defaultPluginExecutor.getRawInfoBy(ctx.state.pluginId).then((raw) {
+    defaultPluginExecutor.getComicBooks(raw).then((list) {
+      ctx.dispatch(ComicBookActionCreator.finishLoad(raw.meta.title, list));
+    });
+  });
 }

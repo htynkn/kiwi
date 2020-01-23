@@ -75,5 +75,27 @@ void main() {
       expect(rawInfo.main.section, isNotNull);
       expect(rawInfo.main.section.parse, isNotEmpty);
     });
+
+    test("test_raw_info_issue_2", () async {
+      var executor = DefaultPluginExecutor();
+
+      var fileContent = await TestUtil.loadFile("issue_2_plugin.xml");
+
+      var result = await GetIt.I
+          .get<PluginManager>()
+          .install(PluginInfo("naver网漫", ""), fileContent);
+
+      expect(result, greaterThan(0));
+      var rawInfo = await executor.getRawInfoBy(result);
+
+      expect(rawInfo.version, equals(4));
+
+      expect(rawInfo.meta.title, equals("naver网漫"));
+
+      expect(rawInfo.main.book.buildUrl, equals("book_buildUrl"));
+
+      expect(rawInfo.main.book.sections, isNotNull);
+      expect(rawInfo.main.book.sections.buildUrl, equals("book_s_buildUrl"));
+    });
   });
 }

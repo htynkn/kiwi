@@ -36,9 +36,8 @@ renderComicSections(
               child: Row(
                 children: <Widget>[
                   TransitionToImage(
-                      image: AdvancedNetworkImage(
-                        state.logo,
-                      ),
+                      image:
+                          AdvancedNetworkImage(state.logo, useDiskCache: true),
                       height: 120,
                       placeholder: CircularProgressIndicator()),
                   Expanded(
