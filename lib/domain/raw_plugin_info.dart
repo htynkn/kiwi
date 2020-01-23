@@ -55,6 +55,16 @@ class RawPluginMainBookInfo {
   String method;
 
   String title;
+
+  String buildUrl;
+
+  RawPluginMainSectionsInfo sections;
+}
+
+class RawPluginMainSectionsInfo {
+  String buildUrl;
+  String parseUrl;
+  String parse;
 }
 
 class RawPluginMainHostInfo {

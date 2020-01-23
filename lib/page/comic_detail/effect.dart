@@ -13,7 +13,9 @@ Effect<ComicDetailState> buildEffect() {
 }
 
 void _init(Action action, Context<ComicDetailState> ctx) {
-  ctx.dispatch(ComicDetailActionCreator.startLoad());
+  Future.delayed(Duration(milliseconds: 100), () {
+    ctx.dispatch(ComicDetailActionCreator.startLoad());
+  });
 }
 
 _onStartLoad(Action action, Context<ComicDetailState> ctx) async {
