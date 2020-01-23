@@ -7,7 +7,6 @@ import 'package:kiwi/theme.dart';
 
 import 'page/comic_section/page.dart';
 import 'page/home/page.dart';
-import 'page/comic_section/page.dart';
 
 Widget createApp() {
   final AbstractRoutes routes = PageRoutes(

@@ -8,15 +8,12 @@ import 'view.dart';
 class ComicDetailPage extends Page<ComicDetailState, Map<String, dynamic>> {
   ComicDetailPage()
       : super(
-            initState: initState,
-            effect: buildEffect(),
-            reducer: buildReducer(),
-            view: buildView,
-            dependencies: Dependencies<ComicDetailState>(
-                adapter: null,
-                slots: <String, Dependent<ComicDetailState>>{
-                }),
-            middleware: <Middleware<ComicDetailState>>[
-            ],);
-
+          initState: initState,
+          effect: buildEffect(),
+          reducer: buildReducer(),
+          view: buildView,
+          dependencies: Dependencies<ComicDetailState>(
+              adapter: null, slots: <String, Dependent<ComicDetailState>>{}),
+          middleware: <Middleware<ComicDetailState>>[],
+        );
 }
