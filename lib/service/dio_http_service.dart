@@ -7,6 +7,7 @@ import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:get_it/get_it.dart';
+import 'package:kiwi/core/analysis_service.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/logging_service.dart';
 import 'package:quiver/strings.dart';
@@ -29,12 +30,9 @@ class DioHttpService extends HttpService {
       {String ua,
       Duration duration = const Duration(minutes: 1),
       String referer}) async {
-    var metric;
+    var analysisService = GetIt.I.get<AnalysisService>();
 
-    if (!isDebug()) {
-      metric = FirebasePerformance.instance.newHttpMetric(url, HttpMethod.Get);
-      await metric.start();
-    }
+    var uuid = await analysisService.startHttpMetric(url, HttpMethod.Get);
 
     try {
       var cacheOption = buildCacheOptions(duration);
@@ -61,10 +59,9 @@ class DioHttpService extends HttpService {
     } catch (e) {
       throw e;
     } finally {
-      if (!isDebug()) {
-        await metric.stop();
-      }
+      await analysisService.stopHttpMetric(uuid);
     }
+
     throw Exception("返回值无效");
   }
 }

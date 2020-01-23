@@ -73,7 +73,7 @@ Widget buildView(
               })),
     ),
   );
-  
+
   return Scaffold(
       appBar: AppBar(
         title: const Text('插件安装'),

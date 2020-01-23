@@ -1,10 +1,13 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get_it/get_it.dart';
+import 'package:kiwi/core/analysis_service.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/logging_service.dart';
 import 'package:kiwi/service/dio_http_service.dart';
 import 'package:kiwi/service/simple_logging_service.dart';
 import 'package:kiwi/service/sited_plugin_provider.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
+
+import 'mock_analysis_service.dart';
 
 void main() {
   group("sited_plugin_provider_test", () {
@@ -15,6 +18,7 @@ void main() {
 
       loader.registerSingleton<LoggingService>(new SimpleLoggingService());
       loader.registerSingleton<HttpService>(new DioHttpService());
+      loader.registerSingleton<AnalysisService>(new MockAnalysisService());
     });
 
     test("get_comic_list", () async {
