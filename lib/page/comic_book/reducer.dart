@@ -7,7 +7,7 @@ Reducer<ComicBookState> buildReducer() {
   return asReducer(
     <Object, Reducer<ComicBookState>>{
       ComicBookAction.finishLoad: _onFinishLoad,
-      ComicBookAction.startLoad: _onStartLoad,
+      ComicBookAction.startLoad: _onStartLoad
     },
   );
 }

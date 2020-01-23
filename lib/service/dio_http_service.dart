@@ -16,10 +16,12 @@ class DioHttpService extends HttpService {
   var dio = Dio();
 
   DioHttpService() {
-    dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
+    if (!isDebug()) {
+      dio.interceptors.add(DioCacheManager(CacheConfig()).interceptor);
 
-    var cookieJar = CookieJar();
-    dio.interceptors.add(CookieManager(cookieJar));
+      var cookieJar = CookieJar();
+      dio.interceptors.add(CookieManager(cookieJar));
+    }
   }
 
   @override

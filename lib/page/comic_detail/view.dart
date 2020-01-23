@@ -1,6 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:kiwi/component/loading.dart';
+import 'package:kiwi/page/comic_detail/action.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import 'state.dart';
@@ -18,14 +19,37 @@ Widget buildView(
 }
 
 renderComicDetails(ComicDetailState state, ViewService viewService, dispatch) {
-  return Container(
-      child: PhotoViewGallery.builder(
-    scrollPhysics: const BouncingScrollPhysics(),
-    builder: (BuildContext context, int index) {
-      return PhotoViewGalleryPageOptions(
-        imageProvider: NetworkImage(state.pics[index]),
-      );
-    },
-    itemCount: state.pics.length,
-  ));
+  return Stack(
+    children: <Widget>[
+      Container(
+          child: PhotoViewGallery.builder(
+        scrollPhysics: const BouncingScrollPhysics(),
+        onPageChanged: (index) {
+          dispatch(ComicDetailActionCreator.changePageIndex(index));
+        },
+        builder: (BuildContext context, int index) {
+          return PhotoViewGalleryPageOptions(
+            imageProvider: NetworkImage(state.pics[index]),
+          );
+        },
+        itemCount: state.pics.length,
+      )),
+      Container(
+        child: Align(
+          alignment: FractionalOffset.bottomRight,
+          child: LayoutBuilder(
+            builder: (_, c) {
+              return Text(
+                "${state.currentPageIndex}/${state.pics.length}",
+                style: TextStyle(
+                    fontSize: 18,
+                    backgroundColor: Colors.black,
+                    color: Colors.white),
+              );
+            },
+          ),
+        ),
+      ),
+    ],
+  );
 }

@@ -1,0 +1,300 @@
+<!--?xml version="1.0" encoding="UTF-8" ?-->
+<sited ver="4" debug="1" engine="34" schema="1">
+    <meta>
+        <ua></ua>
+        <guid>901d23c842fc4466be0e0ef55a245e55</guid>
+        <title>naver网漫</title>
+        <author>Guang</author>
+        <contact>未想好我空着</contact>
+        <intro>[漫画](v4修复)LINE WEBTOON韩国naver官网。매일매일 새로운 재미, 네이버 웹툰.(部分章节提示下架，要登陆原网站观看)</intro>
+        <url>http://m.comic.naver.com/</url>
+        <expr>comic\.naver\.com\/</expr>
+        <logo>http://static.naver.net/m/comic/im/favicon/favicon_140327.ico</logo>
+        <encode>UTF-8</encode>
+        <about title="反馈" mail="wistn@qq.com">
+            <item url="我邮箱是wistn@qq.com"/>
+            <item/>
+            <item url="欢迎打赏插件开发者Guang，反馈问题。"/>
+            <item txt="点击或扫描二维码对[❤❤广]支付宝打赏" expr="https://qr.alipay.com/aex05979jbnzvi4fs3hx691"
+                  logo="http://ww3.sinaimg.cn/mw690/82d3f846gw1f8ah7nyz88j20by0by0sy.jpg"/>
+            <item/>
+            <item txt="扫描二维码对我的微信打赏" logo="http://ww3.sinaimg.cn/mw690/82d3f846gw1f8ah7oa4khj206b06bt9m.jpg"/>
+            <item/>
+        </about>
+    </meta>
+    <main dtype="1" btag="漫画">
+        <home>
+            <updates cache="60m" showImg="1" w="1" h="1" title="요일별" method="get" parse="updates_parse"
+                     url="https://m.comic.naver.com/webtoon/weekday.nhn"/>
+            <tags title="分类">
+                <tags cache="1d" method="get" parse="tags_parse1" url="https://m.comic.naver.com/webtoon/genre.nhn"/>
+                <tags cache="1d" method="get" parse="tags_parse_challenge"
+                      url="https://m.comic.naver.com/bestChallenge/genre.nhn"/>
+            </tags>
+        </home>
+        <search cache="1d" method="get" parse="search_parse1"
+                url="https://m.comic.naver.com/search/result.nhn?keyword=@key&amp;searchType=WEBTOON">
+            <search cache="1d" method="get" parse="search_parse_challenge"
+                    url="https://m.comic.naver.com/search/result.nhn?keyword=@key&amp;searchType=BEST_CHALLENGE"/>
+        </search>
+        <tag>
+            <tag cache="10m" showImg="1" w="1" h="1" method="get" parse="tag_parse1" expr="webtoon\/genre.nhn"/>
+            <tag cache="10m" showImg="1" w="1" h="1" method="get" parse="tag_parse_challenge"
+                 expr="bestChallenge\/genre.nhn"/>
+        </tag>
+        <book cache="1d" method="get" buildUrl="book_buildUrl" parse="book_parse" expr="\/list.nhn">
+            <sections cache="1d" method="get" buildUrl="book_s_buildUrl" parseUrl="book_s_parseUrl"
+                      parse="book_s_parse"/>
+        </book>
+        <section cache="1d" method="get" options="0,0,0,1" parseUrl="section_parseUrl" parse="section_parse"
+                 header="referer" expr="\/detail.nhn"/>
+    </main>
+    <script>
+        <require>
+            <item url="http://sited.noear.org/addin/js/cheerio.js" lib="cheerio"/>
+        </require>
+        <code>
+            <![CDATA[
+function urla(u) {
+    var host = "https://m.comic.naver.com";
+    if (u.indexOf("http") < 0) {
+        if (u.substr(0, 2) == "//") {
+            u = host.match(/https?:/i)[0] + u;
+        } else {
+            if (u.substr(0, 1) == "/")
+                u = host + u;
+            else
+                u = host + '/' + u;
+        }
+    }
+    return encodeURI(u);
+}
+
+/*
+var memo = "pc比wap多/challenge类型但pc目录不知道10页后url so放弃pc。收藏了http://m.comic.naver.com/webtoon/list.nhn?titleId=20853 是上下滑动。https://m.comic.naver.com/webtoon/list.nhn?titleId=651673 是左右滑动。http://m.comic.naver.com/webtoon/list.nhn?titleId=655277 是动态漫画且正序。 http://m.comic.naver.com/webtoon/list.nhn?titleId=696593 有音乐要登陆章节(检测#id_area)。";
+ list = [{url:'http://m.comic.naver.com/webtoon/list.nhn?titleId=20853'},{url:'https://m.comic.naver.com/webtoon/list.nhn?titleId=651673'},{url:'http://m.comic.naver.com/webtoon/list.nhn?titleId=655277'},{url:'http://m.comic.naver.com/webtoon/list.nhn?titleId=696593'}];
+*/
+
+function updates_parse(url, html) {
+    var $ = cheerio.load(html);
+    var list = [];
+    $('.list_toon li>a').each(function () {
+        var item = $(this);
+        var bm = {};
+        bm.name = item.find('.title').text();
+        bm.url = urla(item.attr('href')).replace(/&week=.+$/, '');
+        bm.logo = item.find('img').attr('src');
+        bm.newSection = '';
+        bm.updateTime ='作者:'+ item.find('.author').text();
+        list.push(bm);
+    });
+    return JSON.stringify(list);
+}
+
+function tags_parse1(url, html) {
+    var $ = cheerio.load(html);
+    var list = [];
+    list.push({
+        'group': '正式漫画'
+    });
+    $('#genreScroll ul li a').each(function () {
+        var item = $(this);
+        var bm = {};
+        bm.title = item.text();
+        bm.url = urla(item.attr('href')) + '&sort=NEW&page=@page';
+        list.push(bm);
+    });
+    return JSON.stringify(list);
+}
+
+function tags_parse_challenge(url, html) {
+    var $ = cheerio.load(html);
+    var list = [];
+    list.push({
+        'group': 'best新星漫画'
+    });
+    $('#genreScroll ul li a').slice(1).each(function () {
+        var item = $(this);
+        var bm = {};
+        bm.title = item.text();
+        bm.url = urla(item.attr('href')) + '&page=@page';
+        list.push(bm);
+    });
+    return JSON.stringify(list);
+}
+
+function tag_parse1(url, html) {
+    var $ = cheerio.load(html);
+    var list = [];
+    $('.toon_lst li').each(function () {
+        var item = $(this);
+        var bm = {};
+        bm.name = item.find('.toon_name').text().trim();
+        bm.url = urla(item.find('a').attr('href'));
+        bm.logo = item.find('img').attr('src');
+
+        bm.author = item.find('p.sub_info').text();
+        bm.status = '';
+        bm.newSection = '';
+        bm.updateTime = '';
+        list.push(bm);
+    });
+    return JSON.stringify(list);
+}
+
+function tag_parse_challenge(url, html) {
+    var $ = cheerio.load(html);
+    var list = [];
+    $('.list_toon_wide li').each(function () {
+        var item = $(this);
+        var bm = {};
+        bm.name = item.find('.title').text();
+        bm.url = urla(item.children('a').attr('href'));
+        bm.logo = item.find('img').attr('src');
+
+        bm.author =  item.find('.author').text();;
+        bm.status = '';
+        bm.newSection = '';
+        bm.updateTime = '';
+        list.push(bm);
+    });
+    return JSON.stringify(list);
+}
+
+
+function search_parse1(url, html) {
+    var $ = cheerio.load(html);
+    var list = [];
+    $('.lst').slice(0, 10).each(function () {
+        var item = $(this);
+        var bm = {};
+        bm.name = item.find('.toon_name').text();
+        bm.url = urla(item.children('a').attr('href'));
+        bm.logo = item.find('img').attr('src');
+        bm.author = item.find('.sub_info').eq(0).text();
+        bm.status = '正式漫画';
+        bm.newSection = '';
+        bm.updateTime = '';
+        bm.btag = "正式漫画";
+        if (!bm.url.match(/javascript:goPcPage/i)) {
+            list.push(bm);
+        }
+    });
+    return JSON.stringify(list);
+}
+
+function search_parse_challenge(url, html) {
+    var $ = cheerio.load(html);
+    var list = [];
+    $('.lst').slice(0, 6).each(function () {
+        var item = $(this);
+        var bm = {};
+        bm.name = item.find('.toon_name').text();
+        bm.url = urla(item.children('a').attr('href'));
+        bm.logo = item.find('img').attr('src');
+        bm.author = item.find('.sub_info').eq(0).text();
+        bm.status = 'best新星漫画';
+        bm.newSection = '';
+        bm.updateTime = '';
+        bm.btag = "best新星漫画";
+        if (!bm.url.match(/javascript:goPcPage/i)) {
+            list.push(bm);
+        }
+    });
+    return JSON.stringify(list);
+}
+
+function book_buildUrl(url) {
+    return url.replace(/^http.+?\/\/[^\/]+/i, 'https://m.comic.naver.com');
+}
+
+function book_parse(url, html) {
+    var $ = cheerio.load(html);
+    var data = {};
+        data.name = $('.area_info .title').text();
+        data.author = $('.area_info .author').text();
+        data.logo = $('.area_thumbnail img').eq(0).attr('src');
+        data.intro = $('.summary p').text();
+        data.updateTime = '';
+        data.isSectionsAsc = 0;
+        if ($('.section_episode_list a').length && $('.section_episode_list a').eq(0).attr('href').match(/SortOrder=ASC/i)) {
+            data.isSectionsAsc = 1;
+        }
+    data.sections = [];
+    return JSON.stringify(data);
+}
+
+function book_s_buildUrl(url) {
+    return url.replace(/^http.+?\/\/[^\/]+/i, 'https://m.comic.naver.com');
+}
+
+function book_s_parseUrl(url, html) {
+    var $ = cheerio.load(html);
+    var urls = url;
+    if ($('.current_pg .total').length) {
+        var pages = Number($('.current_pg .total').text());
+        var sortOrder = $('a.btn_next').attr('href').match(/sortOrder=([a-zA-Z]+)/i)[1];
+        for (i = 2; i <= pages; i++) {
+            urls = urls + ';' + url + '&sortOrder=' + sortOrder + '&page=' + i;
+        }
+    }
+    return urls;
+}
+
+function book_s_parse(url, html) {
+    var $ = cheerio.load(html);
+    var data = {};
+    data.sections = [];
+	$('.section_episode_list .item>a').each(function () {
+		if ($(this).attr('href') && $(this).attr('href').match(/titleId/i)) {
+			var bm = {
+				name: $(this).find('.name').text().trim(),
+				url: urla($(this).attr('href'))
+			};
+		} else {
+			var bm = {
+				name: $(this).find('.name').text().trim() + '-要登陆原网站观看',
+				url: ''
+			};
+		}
+		data.sections.push(bm);
+	});
+    return JSON.stringify(data);
+}
+var curl;
+function section_parseUrl(url, html) {
+    var $ = cheerio.load(html);
+    if ($('#id_area').length || $('#toonLayer').length || $('#mflick').length) {
+        return url;
+    } else {
+        curl = html.match(/effecttoonContent[\s\S]+?imageUrl.+?['"\s]+(http.+?)['"\s]/i)[1] + '/';
+        return urla(html.match(/documentURL\s*:\s*['"]\s*(.+?)\s*['"]/i)[1]);
+    }
+}
+
+function section_parse(url, html) {
+    var list = [];
+    if (url.match(/detail.nhn\?titleId=/i) || url.match(/nid.naver.com\/nidlogin/i) || url.match(/detail.nhn\?titleId=.+?#nafullscreen/i)) {
+        var $ = cheerio.load(html);
+        if ($('#toonLayer').length) {
+            $('#toonLayer ul li img').each(function () {
+                list.push($(this).attr('data-src'));
+            });
+        } else if ($('#mflick').length) {
+            $('#mflick>.swiper-wrapper>.swiper-slide>img').each(function () {
+                list.push($(this).attr('data-src'));
+            });
+        } else {}
+    } else {
+        var json = JSON.parse(html);
+		for(var i in json.assets.stillcut){
+			list.push(curl + json.assets.stillcut[i]);
+		}
+    }
+    return JSON.stringify(list);
+}
+
+]]>
+        </code>
+    </script>
+</sited>

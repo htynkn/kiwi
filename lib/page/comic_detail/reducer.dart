@@ -9,8 +9,17 @@ Reducer<ComicDetailState> buildReducer() {
     <Object, Reducer<ComicDetailState>>{
       ComicDetailAction.startLoad: _onStartLoad,
       ComicDetailAction.finishLoad: _onFinishLoad,
+      ComicDetailAction.changePageIndex: _onChangePageIndex,
     },
   );
+}
+
+ComicDetailState _onChangePageIndex(ComicDetailState state, Action action) {
+  int pageIndex = action.payload;
+  if (state.currentPageIndex != pageIndex) {
+    return state.clone()..currentPageIndex = pageIndex;
+  }
+  return state;
 }
 
 ComicDetailState _onStartLoad(ComicDetailState state, Action action) {

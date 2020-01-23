@@ -19,6 +19,10 @@ jobs:
           channel: 'stable'
       - run: flutter pub get
       - run: flutter packages pub run build_runner build --delete-conflicting-outputs
+      - run: flutter test --coverage --coverage-path=lcov.info
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
       - run: flutter build apk
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.1.1
