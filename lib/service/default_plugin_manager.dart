@@ -7,22 +7,29 @@ import 'package:kiwi/domain/dao/plugin_db_object.dart';
 import 'package:kiwi/domain/enum/plugin_type.dart';
 import 'package:kiwi/domain/plugin.dart';
 import 'package:kiwi/domain/plugin_info.dart';
-import 'package:get_it/get_it.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:quiver/strings.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
 class DefaultPluginManager extends PluginManager {
-  String _rootFolderPath;
+  String rootFolderPath;
   LoggingService logging;
 
-  DefaultPluginManager(String rootFolderPath) {
-    this._rootFolderPath = rootFolderPath;
-    this.logging = GetIt.I.get<LoggingService>();
+  DefaultPluginManager(this.logging, {String path}) {
+    if (isNotEmpty(path)) {
+      this.rootFolderPath = path;
+    }
   }
 
-  Future<Database> openDB() {
+  Future<Database> openDB() async {
     DatabaseFactory dbFactory = databaseFactoryIo;
-    return dbFactory.openDatabase(this._rootFolderPath + "/default.db");
+
+    if (isEmpty(this.rootFolderPath)) {
+      var directory = await getApplicationDocumentsDirectory();
+      this.rootFolderPath = directory.path;
+    }
+    return dbFactory.openDatabase(this.rootFolderPath + "/default.db");
   }
 
   @override

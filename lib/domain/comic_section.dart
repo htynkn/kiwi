@@ -23,7 +23,7 @@ class ComicSection {
   factory ComicSection.fromJson(Map<String, dynamic> json) =>
       _$ComicSectionFromJson(json);
 
-  factory ComicSection.fromJsonString(String jsonString) {
+  static fromJsonString(String jsonString) {
     Map<String, dynamic> map = json.decode(jsonString);
 
     var comicSection = ComicSection.fromJson(map);

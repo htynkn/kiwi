@@ -1,23 +1,18 @@
+import 'dart:convert';
+
+import 'package:html/parser.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/logging_service.dart';
 import 'package:kiwi/core/plugin_provider.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 import 'package:kiwi/exception/http_exception.dart';
-import 'package:get_it/get_it.dart';
-import 'package:html/parser.dart';
-import 'dart:convert';
 
 class SitedPluginProvider extends PluginProvider {
   HttpService httpService;
 
   LoggingService logging;
 
-  SitedPluginProvider() {
-    var loader = GetIt.I;
-
-    this.httpService = loader.get<HttpService>();
-    this.logging = loader.get<LoggingService>();
-  }
+  SitedPluginProvider(this.httpService, this.logging);
 
   @override
   list([int pageNum = 1, int pageSize = 20]) async {
