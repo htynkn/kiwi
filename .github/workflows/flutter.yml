@@ -17,6 +17,7 @@ jobs:
       - run: flutter pub get
       - run: flutter packages pub run build_runner build --delete-conflicting-outputs
       - run: flutter test --coverage --coverage-path=lcov.info
+      - uses: malinskiy/action-android/install-sdk@release/0.0.5
       - uses: malinskiy/action-android/emulator-run-cmd@release/0.0.5
         with:
           cmd: flutter drive --target=test_driver/app.dart
