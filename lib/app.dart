@@ -1,6 +1,8 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
+import 'package:kiwi/page/comic_book/action.dart';
 import 'package:kiwi/page/comic_book/page.dart';
+import 'package:kiwi/page/comic_detail/action.dart';
 import 'package:kiwi/page/comic_detail/page.dart';
 import 'package:kiwi/page/install/page.dart';
 import 'package:kiwi/theme.dart';
@@ -52,7 +54,10 @@ EffectMiddleware<T> _pageAnalyticsMiddleware<T>({String tag = 'redux'}) {
   return (AbstractLogic<dynamic> logic, Store<T> store) {
     return (Effect<dynamic> effect) {
       return (Action action, Context<dynamic> ctx) {
-        if (logic is Page<dynamic, dynamic> && action.type is Lifecycle) {
+        if (action.type is ComicDetailAction) {
+          print('${logic.runtimeType} ${action.type.toString()} ');
+        } else if (logic is Page<dynamic, dynamic> &&
+            action.type is Lifecycle) {
           print('${logic.runtimeType} ${action.type.toString()} ');
         }
         return effect?.call(action, ctx);

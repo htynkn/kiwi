@@ -1,7 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:kiwi/domain/comic_section.dart';
 
-enum ComicSectionAction { startLoad, finishLoad, jumpToDetail }
+enum ComicSectionAction { startLoad, finishLoad, jumpToDetail, changeOrder }
 
 class ComicSectionActionCreator {
   static Action startLoad() {
@@ -18,5 +18,9 @@ class ComicSectionActionCreator {
       "url": url,
       "sectionName": sectionName
     });
+  }
+
+  static changeOrder() {
+    return const Action(ComicSectionAction.changeOrder);
   }
 }

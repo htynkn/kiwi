@@ -49,10 +49,13 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_driver:
+    sdk: flutter
   mockito: ^4.1.1
   scratch_space: ^0.0.4+2
   json_serializable: ^3.2.5
   build_runner: ^1.7.3
+  test: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

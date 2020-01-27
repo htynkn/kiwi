@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:kiwi/component/loading.dart';
 import 'package:kiwi/page/comic_detail/action.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -30,7 +31,8 @@ renderComicDetails(ComicDetailState state, ViewService viewService, dispatch) {
         },
         builder: (BuildContext context, int index) {
           return PhotoViewGalleryPageOptions(
-            imageProvider: NetworkImage(state.pics[index]),
+            imageProvider:
+                AdvancedNetworkImage(state.pics[index], useDiskCache: true),
           );
         },
         itemCount: state.pics.length,

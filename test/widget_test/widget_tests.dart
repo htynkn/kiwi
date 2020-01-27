@@ -4,7 +4,7 @@ import 'package:kiwi/ioc_configuration.dart';
 
 void main() {
   testWidgets('init app', (WidgetTester tester) async {
-    configDependencies();
+    IocConfiguration().configDependencies();
 
     await tester.pumpWidget(createApp());
   });

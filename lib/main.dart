@@ -6,7 +6,7 @@ import 'ioc_configuration.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  configDependencies();
+  IocConfiguration().configDependencies();
 
   runApp(createApp());
 }

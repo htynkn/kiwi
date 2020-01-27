@@ -52,6 +52,39 @@ renderComicSections(
                           Text(
                             "[ by ${state.pluginName} ]",
                             style: TextStyle(fontSize: 14),
+                          ),
+                          LayoutBuilder(
+                            builder: (_, c) {
+                              return Container(
+                                width: c.maxWidth / 3 * 2,
+                                margin: EdgeInsets.only(top: 20),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                        color: Theme.of(viewService.context)
+                                            .primaryColorDark,
+                                        width: 1.0,
+                                        style: BorderStyle.solid)),
+                                child: Row(
+                                  children: <Widget>[
+                                    InkWell(
+                                      onTap: () {
+                                        dispatch(ComicSectionActionCreator
+                                            .changeOrder());
+                                      },
+                                      child: Icon(
+                                        Icons.arrow_drop_down,
+                                        color: Theme.of(viewService.context)
+                                            .primaryColorDark,
+                                        size: 30,
+                                        semanticLabel:
+                                            'change order for sections',
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
                           )
                         ],
                       ),

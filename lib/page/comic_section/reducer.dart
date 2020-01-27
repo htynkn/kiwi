@@ -39,8 +39,17 @@ Reducer<ComicSectionState> buildReducer() {
     <Object, Reducer<ComicSectionState>>{
       ComicSectionAction.startLoad: _onStartLoad,
       ComicSectionAction.finishLoad: _onFinishLoad,
+      ComicSectionAction.changeOrder: _onChangeOrder,
     },
   );
+}
+
+ComicSectionState _onChangeOrder(ComicSectionState state, Action action) {
+  var newState = state.clone();
+
+  newState.sections = state.sections.reversed.toList();
+
+  return newState;
 }
 
 ComicSectionState _onStartLoad(ComicSectionState state, Action action) {

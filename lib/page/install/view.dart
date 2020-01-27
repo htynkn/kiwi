@@ -20,6 +20,7 @@ Widget buildView(
               itemCount: plugins.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
+                  key: ValueKey("install_item_$index"),
                   margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                       border: Border.all(
@@ -54,6 +55,7 @@ Widget buildView(
                         child: Align(
                           alignment: FractionalOffset.centerRight,
                           child: Container(
+                            key: ValueKey("install_item_button_$index"),
                             padding: EdgeInsets.only(right: 10),
                             child: RaisedButton(
                               child: Text("安装"),
