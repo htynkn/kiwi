@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:kiwi/core/http_service.dart';
+import 'package:kiwi/core/js_engine_service.dart';
 import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/domain/comic_book.dart';
 import 'package:kiwi/domain/comic_detail.dart';
 import 'package:kiwi/domain/comic_section.dart';
 import 'package:kiwi/domain/raw_plugin_info.dart';
 import 'package:kiwi/exception/plugin_exception.dart';
-import 'package:kiwi/service/js_engine_service.dart';
 import 'package:ms_dart/ms_dart.dart';
 import 'package:quiver/strings.dart';
 import 'package:xml/xml.dart' as xml;
@@ -46,7 +46,8 @@ class DefaultPluginExecutor {
     }
 
     if (metaContainer != null) {
-      rawPluginMetaInfo.ua = _getText(metaContainer, "ua");
+      rawPluginMetaInfo.ua =
+          _getText(metaContainer, "ua").replaceAll("\n", " ").trim();
       rawPluginMetaInfo.title = _getText(metaContainer, "title");
       rawPluginMetaInfo.author = _getText(metaContainer, "author");
       rawPluginMetaInfo.intro = _getText(metaContainer, "intro");
