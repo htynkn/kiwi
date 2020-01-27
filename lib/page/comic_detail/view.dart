@@ -23,6 +23,7 @@ renderComicDetails(ComicDetailState state, ViewService viewService, dispatch) {
     children: <Widget>[
       Container(
           child: PhotoViewGallery.builder(
+        scrollDirection: Axis.horizontal,
         scrollPhysics: const BouncingScrollPhysics(),
         onPageChanged: (index) {
           dispatch(ComicDetailActionCreator.changePageIndex(index));

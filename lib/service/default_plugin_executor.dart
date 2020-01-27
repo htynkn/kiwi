@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:get_it/get_it.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/domain/comic_book.dart';
@@ -18,8 +18,13 @@ class DefaultPluginExecutor {
   final String defaultUA =
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36";
 
+  PluginManager manager;
+  HttpService httpService;
+  JsEngineService jsEngineService;
+
+  DefaultPluginExecutor(this.manager, this.httpService, this.jsEngineService);
+
   Future<RawPluginInfo> getRawInfoBy(int id) async {
-    var manager = GetIt.I.get<PluginManager>();
     var plugin = await manager.getById(id);
     var rawPluginInfo = RawPluginInfo();
 
@@ -125,10 +130,6 @@ class DefaultPluginExecutor {
   }
 
   Future<List<ComicBook>> getComicBooks(RawPluginInfo pluginInfo) async {
-    var httpService = GetIt.I.get<HttpService>();
-
-    var jsEngineService = GetIt.I.get<JsEngineService>();
-
     var code = pluginInfo.script.code;
 
     for (var url in pluginInfo.script.requireList) {
@@ -149,16 +150,12 @@ class DefaultPluginExecutor {
     var result = await jsEngineService.executeJsWithContext(
         code, home.parse + "(url,html)", context);
 
-    var books = ComicBook.fromJsonList(result);
+    var books = await compute(ComicBook.fromJsonList, result);
 
     return Future.value(books);
   }
 
   getSections(RawPluginInfo pluginInfo, String url) async {
-    var httpService = GetIt.I.get<HttpService>();
-
-    var jsEngineService = GetIt.I.get<JsEngineService>();
-
     var code = pluginInfo.script.code;
 
     for (var url in pluginInfo.script.requireList) {
@@ -187,7 +184,7 @@ class DefaultPluginExecutor {
     var result = await jsEngineService.executeJsWithContext(
         code, book.parse + "(url,html)", context);
 
-    var comicSection = ComicSection.fromJsonString(result);
+    var comicSection = await compute(ComicSection.fromJsonString, result);
 
     comicSection.pluginName = pluginInfo.meta.title;
 
@@ -231,7 +228,8 @@ class DefaultPluginExecutor {
         var tempResult = await jsEngineService.executeJsWithContext(
             code, book.sections.parse + "(url,html)", context);
 
-        var tempSection = ComicSection.fromJsonString(tempResult);
+        var tempSection =
+            await compute(ComicSection.fromJsonString, tempResult);
 
         comicSection.sections.addAll(tempSection.sections);
       }
@@ -243,10 +241,6 @@ class DefaultPluginExecutor {
   Future<ComicDetail> getComicDetails(
       RawPluginInfo pluginInfo, String url) async {
     var comicDetail = ComicDetail();
-
-    var httpService = GetIt.I.get<HttpService>();
-
-    var jsEngineService = GetIt.I.get<JsEngineService>();
 
     var code = pluginInfo.script.code;
 

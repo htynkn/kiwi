@@ -1,26 +1,22 @@
 import 'dart:io';
 
-import 'package:kiwi/core/logging_service.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 import 'package:kiwi/service/default_plugin_manager.dart';
 import 'package:kiwi/service/simple_logging_service.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:scratch_space/scratch_space.dart';
+
 import '../util/test_util.dart';
 
 void main() {
   group("default_plugin_manager", () {
     String tempDir;
-
-    setUpAll(() {
-      GetIt.I.reset();
-      GetIt.I.registerSingleton<LoggingService>(SimpleLoggingService());
-    });
-
+    var manager;
     setUp(() {
       var scratchSpace = new ScratchSpace();
       tempDir = scratchSpace.tempDir.path;
+
+      manager = DefaultPluginManager(SimpleLoggingService(), path: tempDir);
     });
 
     tearDown(() {
@@ -28,8 +24,6 @@ void main() {
     });
 
     test("test_install", () async {
-      var manager = DefaultPluginManager(tempDir);
-
       var list = await manager.load();
 
       expect(list, isNotNull);
@@ -48,8 +42,6 @@ void main() {
     });
 
     test("test_reinstall", () async {
-      var manager = DefaultPluginManager(tempDir);
-
       var list = await manager.load();
 
       expect(list, isNotNull);
@@ -77,8 +69,6 @@ void main() {
     });
 
     test("test_get_by_id", () async {
-      var manager = DefaultPluginManager(tempDir);
-
       var list = await manager.load();
 
       expect(list, isNotNull);

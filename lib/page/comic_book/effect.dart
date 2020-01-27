@@ -28,9 +28,9 @@ _jumpToSection(Action action, Context<ComicBookState> ctx) {
 _startLoad(Action action, Context<ComicBookState> ctx) async {
   var defaultPluginExecutor = GetIt.I.get<DefaultPluginExecutor>();
 
-  defaultPluginExecutor.getRawInfoBy(ctx.state.pluginId).then((raw) {
-    defaultPluginExecutor.getComicBooks(raw).then((list) {
-      ctx.dispatch(ComicBookActionCreator.finishLoad(raw.meta.title, list));
-    });
-  });
+  var raw = await defaultPluginExecutor.getRawInfoBy(ctx.state.pluginId);
+
+  var list = await defaultPluginExecutor.getComicBooks(raw);
+
+  ctx.dispatch(ComicBookActionCreator.finishLoad(raw.meta.title, list));
 }

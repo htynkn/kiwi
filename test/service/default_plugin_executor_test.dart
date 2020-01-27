@@ -1,27 +1,36 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
-import 'package:kiwi/core/logging_service.dart';
 import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 import 'package:kiwi/service/default_plugin_executor.dart';
 import 'package:kiwi/service/default_plugin_manager.dart';
+import 'package:kiwi/service/dio_http_service.dart';
+import 'package:kiwi/service/js_engine_service.dart';
 import 'package:kiwi/service/simple_logging_service.dart';
 import 'package:scratch_space/scratch_space.dart';
 
 import '../util/test_util.dart';
+import 'mock_analysis_service.dart';
 
 void main() {
   group("test_plugin_executor", () {
     String tempDir;
+    PluginManager pluginManager;
+    DefaultPluginExecutor executor;
 
     setUp(() {
       var scratchSpace = new ScratchSpace();
       tempDir = scratchSpace.tempDir.path;
-      GetIt.I.reset();
-      GetIt.I.registerSingleton<LoggingService>(SimpleLoggingService());
-      GetIt.I.registerSingleton<PluginManager>(DefaultPluginManager(tempDir));
+
+      pluginManager =
+          DefaultPluginManager(SimpleLoggingService(), path: tempDir);
+
+      var httpService =
+          DioHttpService(MockAnalysisService(), SimpleLoggingService());
+
+      executor =
+          DefaultPluginExecutor(pluginManager, httpService, JsEngineService());
     });
 
     tearDown(() {
@@ -29,13 +38,10 @@ void main() {
     });
 
     test("test_raw_info", () async {
-      var executor = DefaultPluginExecutor();
-
       var fileContent = await TestUtil.loadFile("default_plugin.xml");
 
-      var result = await GetIt.I
-          .get<PluginManager>()
-          .install(PluginInfo("漫画堆-手机版", ""), fileContent);
+      var result =
+          await pluginManager.install(PluginInfo("漫画堆-手机版", ""), fileContent);
 
       expect(result, greaterThan(0));
       var rawInfo = await executor.getRawInfoBy(result);
@@ -49,13 +55,10 @@ void main() {
     });
 
     test("test_raw_info_issue_1", () async {
-      var executor = DefaultPluginExecutor();
-
       var fileContent = await TestUtil.loadFile("issue_1_plugin.xml");
 
-      var result = await GetIt.I
-          .get<PluginManager>()
-          .install(PluginInfo("东方二次元", ""), fileContent);
+      var result =
+          await pluginManager.install(PluginInfo("东方二次元", ""), fileContent);
 
       expect(result, greaterThan(0));
       var rawInfo = await executor.getRawInfoBy(result);
@@ -77,13 +80,10 @@ void main() {
     });
 
     test("test_raw_info_issue_2", () async {
-      var executor = DefaultPluginExecutor();
-
       var fileContent = await TestUtil.loadFile("issue_2_plugin.xml");
 
-      var result = await GetIt.I
-          .get<PluginManager>()
-          .install(PluginInfo("naver网漫", ""), fileContent);
+      var result =
+          await pluginManager.install(PluginInfo("naver网漫", ""), fileContent);
 
       expect(result, greaterThan(0));
       var rawInfo = await executor.getRawInfoBy(result);
