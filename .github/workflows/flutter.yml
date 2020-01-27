@@ -21,13 +21,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
       - run: flutter build apk
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
-    steps:
       - name: upload artifact to Firebase App Distribution
+        if: github.ref == 'refs/heads/master'
         uses: wzieba/Firebase-Distribution-Github-Action@v1.1.1
         with:
           appId: ${{secrets.FIREBASE_APP_ID}}
