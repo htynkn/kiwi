@@ -29,7 +29,7 @@ Widget buildView(
               width: 1.0,
               style: BorderStyle.solid)),
       child: Container(
-          key: Key("home_button_install_plugin"),
+          key: ValueKey("home_button_install_plugin"),
           child: Icon(
             Icons.add,
             color: Theme.of(viewService.context).primaryColorDark,
@@ -65,6 +65,7 @@ Widget pluginItemContainer(
         dispatch(HomeActionCreator.clickBook(plugin.id));
       },
       child: Container(
+        key: ValueKey("home_item_${plugin.id}"),
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.0),
