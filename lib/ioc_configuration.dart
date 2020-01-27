@@ -13,27 +13,49 @@ import 'service/default_plugin_manager.dart';
 import 'service/dio_http_service.dart';
 import 'service/js_engine_service.dart';
 
-configDependencies() {
-  var loader = GetIt.I;
+class IocConfiguration {
+  configDependencies(
+      {AnalysisService analysisService, JsEngineService jsEngineService}) {
+    var loader = GetIt.I;
 
-  loader.registerLazySingleton<LoggingService>((() => SimpleLoggingService()));
+    loader
+        .registerLazySingleton<LoggingService>((() => SimpleLoggingService()));
 
-  loader.registerLazySingleton<AnalysisService>(
-      (() => FirebaseAnalysisService()));
+    if (analysisService != null) {
+      loader.registerLazySingleton<AnalysisService>((() => analysisService));
+    } else {
+      loader.registerLazySingleton<AnalysisService>(
+          (() => FirebaseAnalysisService()));
+    }
 
-  loader.registerLazySingleton<JsEngineService>((() => JsEngineService()));
+    if (jsEngineService != null) {
+      loader.registerLazySingleton<JsEngineService>((() => jsEngineService));
+    } else {
+      loader.registerLazySingleton<JsEngineService>((() => JsEngineService()));
+    }
 
-  loader.registerLazySingleton<HttpService>((() => DioHttpService(
-      loader.get<AnalysisService>(), loader.get<LoggingService>())));
+    loader.registerLazySingleton<HttpService>((() => DioHttpService(
+        loader.get<AnalysisService>(), loader.get<LoggingService>())));
 
-  loader.registerLazySingleton<PluginProvider>((() => SitedPluginProvider(
-      loader.get<HttpService>(), loader.get<LoggingService>())));
+    loader.registerLazySingleton<PluginProvider>((() => SitedPluginProvider(
+        loader.get<HttpService>(), loader.get<LoggingService>())));
 
-  loader.registerLazySingleton<PluginManager>(
-      () => DefaultPluginManager(loader.get()));
+    loader.registerLazySingleton<PluginManager>(
+        () => DefaultPluginManager(loader.get()));
 
-  loader.registerLazySingleton<DefaultPluginExecutor>(
-      (() => DefaultPluginExecutor(loader.get(), loader.get(), loader.get())));
+    loader.registerLazySingleton<DefaultPluginExecutor>((() =>
+        DefaultPluginExecutor(loader.get(), loader.get(), loader.get())));
 
-  return loader;
+    return loader;
+  }
+
+  configLoggingService(GetIt loader) {
+    loader
+        .registerLazySingleton<LoggingService>((() => SimpleLoggingService()));
+  }
+
+  configAnalysisService(GetIt loader) {
+    loader.registerLazySingleton<AnalysisService>(
+        (() => FirebaseAnalysisService()));
+  }
 }

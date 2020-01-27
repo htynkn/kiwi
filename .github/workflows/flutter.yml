@@ -23,7 +23,7 @@ jobs:
           cmd: flutter drive --target=test_driver/app.dart
           api: 28
           tag: default
-          abi: x86
+          abi: armeabi
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
