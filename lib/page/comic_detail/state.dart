@@ -1,4 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:kiwi/domain/enum/comic_detail_direction.dart';
 
 class ComicDetailState implements Cloneable<ComicDetailState> {
   List<String> pics;
@@ -12,6 +13,7 @@ class ComicDetailState implements Cloneable<ComicDetailState> {
   Duration duration;
 
   int currentPageIndex;
+  ComicDetailDirection direction;
 
   @override
   ComicDetailState clone() {
@@ -24,6 +26,7 @@ class ComicDetailState implements Cloneable<ComicDetailState> {
       ..reference = reference
       ..duration = duration
       ..currentPageIndex = currentPageIndex
+      ..direction = direction
       ..url = url;
   }
 }
@@ -36,6 +39,7 @@ ComicDetailState initState(Map<String, dynamic> args) {
   comicDetailState.loading = true;
   comicDetailState.sectionName = args["sectionName"];
   comicDetailState.currentPageIndex = 1;
+  comicDetailState.direction = ComicDetailDirection.CROSS;
 
   return comicDetailState;
 }

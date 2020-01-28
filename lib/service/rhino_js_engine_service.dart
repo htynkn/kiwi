@@ -2,7 +2,8 @@ import 'package:flutter/services.dart';
 import 'package:kiwi/core/js_engine_service.dart';
 
 class RhinoJsEngineService extends JsEngineService {
-  static const platform = const MethodChannel('com.huangyunkun.kiwi/rhinoJsEngine');
+  static const platform =
+      const MethodChannel('com.huangyunkun.kiwi/rhinoJsEngine');
 
   @override
   Future<String> executeJs(String script, String method) async {

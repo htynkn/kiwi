@@ -14,6 +14,7 @@ Effect<ComicSectionState> buildEffect() {
     ComicSectionAction.jumpToDetail: _jumpToDetail
   });
 }
+
 _jumpToDetail(Action action, Context<ComicSectionState> ctx) async {
   Navigator.of(ctx.context)
       .pushNamed('comic_detail', arguments: action.payload);

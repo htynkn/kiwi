@@ -1,10 +1,10 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
-import 'package:kiwi/page/comic_book/action.dart';
 import 'package:kiwi/page/comic_book/page.dart';
 import 'package:kiwi/page/comic_detail/action.dart';
 import 'package:kiwi/page/comic_detail/page.dart';
 import 'package:kiwi/page/install/page.dart';
+import 'package:kiwi/page/settings/page.dart';
 import 'package:kiwi/theme.dart';
 
 import 'page/comic_section/page.dart';
@@ -15,6 +15,7 @@ Widget createApp() {
     pages: <String, Page<Object, dynamic>>{
       'home': HomePage(),
       'install': InstallPage(),
+      'settings': SettingsPage(),
       'comic_book': ComicBookPage(),
       'comic_section': ComicSectionPage(),
       'comic_detail': ComicDetailPage(),

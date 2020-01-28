@@ -1,7 +1,12 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:kiwi/domain/comic_detail.dart';
 
-enum ComicDetailAction { startLoad, finishLoad, changePageIndex }
+enum ComicDetailAction {
+  startLoad,
+  finishLoad,
+  changePageIndex,
+  changeDirection
+}
 
 class ComicDetailActionCreator {
   static Action startLoad() {
@@ -14,5 +19,9 @@ class ComicDetailActionCreator {
 
   static changePageIndex(int index) {
     return Action(ComicDetailAction.changePageIndex, payload: index + 1);
+  }
+
+  static changeDirection(String newValue) {
+    return Action(ComicDetailAction.changeDirection, payload: newValue);
   }
 }

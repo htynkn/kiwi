@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:kiwi/domain/comic_detail.dart';
+import 'package:kiwi/domain/enum/comic_detail_direction.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -10,8 +11,21 @@ Reducer<ComicDetailState> buildReducer() {
       ComicDetailAction.startLoad: _onStartLoad,
       ComicDetailAction.finishLoad: _onFinishLoad,
       ComicDetailAction.changePageIndex: _onChangePageIndex,
+      ComicDetailAction.changeDirection: _onChangeDirection,
     },
   );
+}
+
+ComicDetailState _onChangeDirection(ComicDetailState state, Action action) {
+  var newState = state.clone();
+
+  if (action.payload == ComicDetailDirection.CROSS.toString()) {
+    newState.direction = ComicDetailDirection.CROSS;
+  } else {
+    newState.direction = ComicDetailDirection.VERTICAL;
+  }
+
+  return newState;
 }
 
 ComicDetailState _onChangePageIndex(ComicDetailState state, Action action) {
