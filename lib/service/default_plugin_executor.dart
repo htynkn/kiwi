@@ -111,6 +111,7 @@ class DefaultPluginExecutor {
     sectionInfo.cache = section.getAttribute("cache");
     sectionInfo.method = section.getAttribute("method");
     sectionInfo.parse = section.getAttribute("parse");
+    sectionInfo.parseUrl = section.getAttribute("parseUrl");
 
     rawPluginInfo.main.section = sectionInfo;
 
@@ -242,6 +243,7 @@ class DefaultPluginExecutor {
   Future<ComicDetail> getComicDetails(
       RawPluginInfo pluginInfo, String url) async {
     var comicDetail = ComicDetail();
+    comicDetail.pics = List();
 
     var code = pluginInfo.script.code;
 
@@ -253,23 +255,43 @@ class DefaultPluginExecutor {
 
     var section = pluginInfo.main.section;
 
-    var html = await httpService.get(url,
-        ua: pluginInfo.meta.ua, duration: _getDuration(section.cache));
+    List<String> urls = List();
+    if (isNotEmpty(section.parseUrl)) {
+      var html = await httpService.get(url,
+          ua: pluginInfo.meta.ua, duration: _getDuration(section.cache));
 
-    Map<String, String> context = HashMap();
-    context.putIfAbsent("html", () => html);
-    context.putIfAbsent("url", () => url);
+      Map<String, String> context = HashMap();
+      context.putIfAbsent("html", () => html);
+      context.putIfAbsent("url", () => url);
 
-    var result = await jsEngineService.executeJsWithContext(
-        code, section.parse + "(url,html)", context);
+      var result = await jsEngineService.executeJsWithContext(
+          code, section.parseUrl + "(url,html)", context);
 
-    var pics = (jsonDecode(result) as List<dynamic>).cast<String>();
+      urls.addAll(result.split(";"));
+    } else {
+      urls.add(url);
+    }
 
-    comicDetail.pics = pics;
     comicDetail.ua = pluginInfo.meta.ua;
     comicDetail.reference = url;
     comicDetail.duration =
         this._getDuration(section.cache, defaultDurationInMin: 60 * 24 * 7);
+
+    for (var singleUrl in urls) {
+      var html = await httpService.get(singleUrl,
+          ua: pluginInfo.meta.ua, duration: _getDuration(section.cache));
+
+      Map<String, String> context = HashMap();
+      context.putIfAbsent("html", () => html);
+      context.putIfAbsent("url", () => url);
+
+      var result = await jsEngineService.executeJsWithContext(
+          code, section.parse + "(url,html)", context);
+
+      var pics = (jsonDecode(result) as List<dynamic>).cast<String>();
+
+      comicDetail.pics.addAll(pics);
+    }
 
     return Future.value(comicDetail);
   }

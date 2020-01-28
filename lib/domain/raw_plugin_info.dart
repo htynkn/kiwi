@@ -45,6 +45,8 @@ class RawPluginMainSectionInfo {
   String parse;
 
   String method;
+
+  String parseUrl;
 }
 
 class RawPluginMainBookInfo {

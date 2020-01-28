@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/js_engine_service.dart';
 import 'package:kiwi/core/plugin_manager.dart';
-import 'package:kiwi/domain/comic_book.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 import 'package:kiwi/ioc_configuration.dart';
 import 'package:kiwi/service/default_plugin_executor.dart';
@@ -103,6 +102,19 @@ void main() {
 
       expect(rawInfo.main.book.sections, isNotNull);
       expect(rawInfo.main.book.sections.buildUrl, equals("book_s_buildUrl"));
+    });
+
+    test("test_raw_info_issue_3", () async {
+      var fileContent = await TestUtil.loadFile("issue_3_plugin.xml");
+
+      var result =
+          await pluginManager.install(PluginInfo("naver网漫", ""), fileContent);
+
+      expect(result, greaterThan(0));
+      var rawInfo = await executor.getRawInfoBy(result);
+
+      expect(rawInfo.main.section.parse, isNotNull);
+      expect(rawInfo.main.section.parseUrl, equals("section_parse_url"));
     });
   });
 }
