@@ -20,39 +20,41 @@ Widget buildView(
 }
 
 renderComicDetails(ComicDetailState state, ViewService viewService, dispatch) {
-  return Stack(
-    children: <Widget>[
-      Container(
-          child: PhotoViewGallery.builder(
-        scrollDirection: Axis.horizontal,
-        scrollPhysics: const BouncingScrollPhysics(),
-        onPageChanged: (index) {
-          dispatch(ComicDetailActionCreator.changePageIndex(index));
-        },
-        builder: (BuildContext context, int index) {
-          return PhotoViewGalleryPageOptions(
-            imageProvider:
-                AdvancedNetworkImage(state.pics[index], useDiskCache: true),
-          );
-        },
-        itemCount: state.pics.length,
-      )),
-      Container(
-        child: Align(
-          alignment: FractionalOffset.bottomRight,
-          child: LayoutBuilder(
-            builder: (_, c) {
-              return Text(
-                "${state.currentPageIndex}/${state.pics.length}",
-                style: TextStyle(
-                    fontSize: 18,
-                    backgroundColor: Colors.black,
-                    color: Colors.white),
-              );
-            },
+  return SafeArea(
+    child: Stack(
+      children: <Widget>[
+        Container(
+            child: PhotoViewGallery.builder(
+          scrollDirection: Axis.horizontal,
+          scrollPhysics: const BouncingScrollPhysics(),
+          onPageChanged: (index) {
+            dispatch(ComicDetailActionCreator.changePageIndex(index));
+          },
+          builder: (BuildContext context, int index) {
+            return PhotoViewGalleryPageOptions(
+              imageProvider:
+                  AdvancedNetworkImage(state.pics[index], useDiskCache: true),
+            );
+          },
+          itemCount: state.pics.length,
+        )),
+        Container(
+          child: Align(
+            alignment: FractionalOffset.bottomRight,
+            child: LayoutBuilder(
+              builder: (_, c) {
+                return Text(
+                  "${state.currentPageIndex}/${state.pics.length}",
+                  style: TextStyle(
+                      fontSize: 18,
+                      backgroundColor: Colors.black,
+                      color: Colors.white),
+                );
+              },
+            ),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
   );
 }

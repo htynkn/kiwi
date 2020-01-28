@@ -7,13 +7,13 @@ import 'package:kiwi/core/plugin_provider.dart';
 import 'package:kiwi/service/firebase_analysis_service.dart';
 import 'package:kiwi/service/simple_logging_service.dart';
 import 'package:kiwi/service/sited_plugin_provider.dart';
+import 'package:kiwi/service/v8_js_engine_service.dart';
 
 import 'core/js_engine_service.dart';
 import 'core/plugin_manager.dart';
 import 'service/default_plugin_executor.dart';
 import 'service/default_plugin_manager.dart';
 import 'service/dio_http_service.dart';
-import 'service/rhino_js_engine_service.dart';
 
 class IocConfiguration {
   configDependencies(
@@ -33,8 +33,8 @@ class IocConfiguration {
     if (jsEngineService != null) {
       loader.registerLazySingleton<JsEngineService>((() => jsEngineService));
     } else {
-      loader.registerLazySingleton<JsEngineService>(
-          (() => RhinoJsEngineService()));
+      loader
+          .registerLazySingleton<JsEngineService>((() => V8JsEngineService()));
     }
 
     loader.registerLazySingleton<HttpService>((() => DioHttpService(

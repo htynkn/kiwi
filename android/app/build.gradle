@@ -67,8 +67,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
     implementation 'com.google.firebase:firebase-perf:18.0.1'
     implementation 'org.mozilla:rhino:1.7.12'
+    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
+    implementation 'com.eclipsesource.j2v8:j2v8:6.0.0@aar'
+
     testImplementation 'junit:junit:4.12'
+    testImplementation 'com.eclipsesource.j2v8:j2v8_macosx_x86_64:4.6.0'
+
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation 'com.google.firebase:firebase-crashlytics:17.0.0-beta01'
 }
