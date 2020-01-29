@@ -20,7 +20,8 @@ jobs:
       - name: Use GitVersion
         id: gitversion # step id used as reference for output values
         uses: gittools/actions/gitversion/execute@v0.6.1
-      - run: |
+      - name: Show GitVersion info
+        run: |
           echo "Major: ${{ steps.gitversion.outputs.major }}"
           echo "Minor: ${{ steps.gitversion.outputs.minor }}"
           echo "Patch: ${{ steps.gitversion.outputs.patch }}"
@@ -63,7 +64,7 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - run: flutter build apk
+      - run: flutter build apk --build-name ${{ steps.gitversion.outputs.fullSemVer }} --build-number ${{ steps.gitversion.outputs.buildMetaData }}
       - name: upload artifact to Firebase App Distribution
         if: github.ref == 'refs/heads/master'
         uses: wzieba/Firebase-Distribution-Github-Action@v1.1.1
