@@ -42,6 +42,7 @@ dependencies:
 
   # ui
   shared_preferences_settings: ^1.0.0+1
+  shared_preferences: any
   rflutter_alert: ^1.0.3
 
   quiver: any
