@@ -1,0 +1,1 @@
+enum ComicDetailDirection { CROSS, VERTICAL }

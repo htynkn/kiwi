@@ -42,6 +42,18 @@ Widget buildView(
   return Scaffold(
       appBar: AppBar(
         title: const Text('首页'),
+        actions: <Widget>[
+          IconButton(
+            // action button
+            icon: Icon(
+              Icons.settings,
+            ),
+            onPressed: () {
+              Navigator.of(viewService.context)
+                  .pushNamed('settings', arguments: null);
+            },
+          )
+        ],
         backgroundColor: Theme.of(viewService.context).primaryColor,
       ),
       body: Container(
