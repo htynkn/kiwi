@@ -643,19 +643,42 @@ packages:
     source: hosted
     version: "0.6.3+5"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.4.3"
+    version: "0.5.6+1"
+  shared_preferences_macos:
+    dependency: transitive
+    description:
+      name: shared_preferences_macos
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.0.1+4"
+  shared_preferences_platform_interface:
+    dependency: transitive
+    description:
+      name: shared_preferences_platform_interface
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.0.1"
   shared_preferences_settings:
     dependency: "direct main"
     description:
-      name: shared_preferences_settings
+      path: "."
+      ref: "9857951c728bd23df27995ef92da4e489a072f8c"
+      resolved-ref: "9857951c728bd23df27995ef92da4e489a072f8c"
+      url: "https://github.com/BarthaBRW/shared_preferences_settings.git"
+    source: git
+    version: "1.1.0"
+  shared_preferences_web:
+    dependency: transitive
+    description:
+      name: shared_preferences_web
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.0.0+1"
+    version: "0.1.2+3"
   shelf:
     dependency: transitive
     description:

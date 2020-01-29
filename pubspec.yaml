@@ -41,8 +41,11 @@ dependencies:
   uuid: ^2.0.4
 
   # ui
-  shared_preferences_settings: ^1.0.0+1
-  shared_preferences: any
+  shared_preferences_settings:
+    git:
+      url: https://github.com/BarthaBRW/shared_preferences_settings.git
+      ref: 9857951c728bd23df27995ef92da4e489a072f8c
+  shared_preferences: ^0.5.6
   rflutter_alert: ^1.0.3
 
   quiver: any
