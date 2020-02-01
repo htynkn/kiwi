@@ -20,19 +20,15 @@ void main() {
       }
     });
 
-    test('go to install page', () async {
+    test('test install page', () async {
       await driver.tap(installButton);
 
       await driver.waitFor(find.byValueKey("install_item_1"),
           timeout: Duration(seconds: 5));
-    });
-
-    test('test plugin search', () async {
-      await driver.tap(installButton);
 
       await driver.waitFor(installSearchInput, timeout: Duration(seconds: 5));
 
-      await driver.tap(installSearchInput); // acquire focus
+      await driver.tap(installSearchInput);
       await driver.enterText('na');
 
       await driver.tap(installSearchButton);
