@@ -10,11 +10,13 @@ import 'package:kiwi/ioc_configuration.dart';
 import 'package:kiwi/service/default_plugin_executor.dart';
 import 'package:kiwi/service/default_plugin_manager.dart';
 import 'package:kiwi/service/simple_logging_service.dart';
+import 'package:mockito/mockito.dart';
 import 'package:scratch_space/scratch_space.dart';
 
 import '../util/test_util.dart';
 import 'mock_analysis_service.dart';
-import 'test_js_engine_service.dart';
+import 'mock_http_service.dart';
+import 'node_js_engine_service.dart';
 
 void main() {
   group("test_plugin_executor", () {
@@ -29,7 +31,7 @@ void main() {
       GetIt.I.reset();
 
       var loader = IocConfiguration().configDependencies(
-          jsEngineService: TestJsEngineService(),
+          jsEngineService: NodeJsEngineService(),
           analysisService: MockAnalysisService());
 
       pluginManager =
@@ -115,6 +117,62 @@ void main() {
 
       expect(rawInfo.main.section.parse, isNotNull);
       expect(rawInfo.main.section.parseUrl, equals("section_parse_url"));
+    });
+  });
+
+  group("test_parse", () {
+    String tempDir;
+    PluginManager pluginManager;
+    DefaultPluginExecutor executor;
+
+    setUp(() async {
+      var scratchSpace = new ScratchSpace();
+      tempDir = scratchSpace.tempDir.path;
+
+      GetIt.I.reset();
+
+      var loader = IocConfiguration().configDependencies(
+          jsEngineService: NodeJsEngineService(),
+          analysisService: MockAnalysisService());
+
+      pluginManager =
+          DefaultPluginManager(SimpleLoggingService(), path: tempDir);
+
+      var mockHttpService = MockHttpService();
+
+      executor = DefaultPluginExecutor(
+          pluginManager, mockHttpService, loader.get<JsEngineService>());
+
+      var cheerioContent = await TestUtil.loadFile("cheerio.js");
+
+      when(mockHttpService.get(
+              argThat(equals("http://sited.noear.org/addin/js/cheerio.js")),
+              ua: anyNamed("ua")))
+          .thenAnswer((_) => Future.value(cheerioContent));
+
+      var tohomh123Html = await TestUtil.loadFile("tohomh123.html");
+
+      when(mockHttpService.get(argThat(equals("https://www.tohomh123.com/")),
+              ua: anyNamed("ua"), duration: anyNamed("duration")))
+          .thenAnswer((_) => Future.value(tohomh123Html));
+    });
+
+    tearDown(() {
+      Directory(tempDir).delete(recursive: true);
+    });
+
+    test("test_get_comic_books", () async {
+      var fileContent = await TestUtil.loadFile("issue_3_plugin.xml");
+
+      var id = await pluginManager.install(PluginInfo("土豪漫画", ""), fileContent);
+
+      expect(id, greaterThan(0));
+
+      var raw = await executor.getRawInfoBy(id);
+
+      var list = await executor.getComicBooks(raw);
+
+      expect(list, isNotEmpty);
     });
   });
 }
