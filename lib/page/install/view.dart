@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kiwi/component/loading.dart';
 import 'package:kiwi/page/install/action.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 
 import 'state.dart';
 
@@ -11,17 +10,41 @@ Widget buildView(
     InstallState state, Dispatch dispatch, ViewService viewService) {
   var plugins = state.pluginsInfo;
 
+  TextEditingController searchInputController =
+      new TextEditingController(text: state.searchKey ?? "");
+
   var renderInstallList = Container(
-    padding: const EdgeInsets.all(2.0),
-    child: LogConsoleOnShake(
-      child: Center(
+    padding: const EdgeInsets.all(10.0),
+    child: Column(
+      children: <Widget>[
+        Container(
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                child: TextFormField(
+                    controller: searchInputController,
+                    key: ValueKey("install-search-input"),
+                    decoration: const InputDecoration(
+                      hintText: '插件关键字',
+                    )),
+              ),
+              InkWell(
+                key: ValueKey("install-search-button"),
+                child: Icon(Icons.search),
+                onTap: () {
+                  var searchText = searchInputController.text;
+                  dispatch(InstallActionCreator.search(searchText));
+                },
+              )
+            ],
+          ),
+        ),
+        Expanded(
           child: ListView.builder(
-              padding: const EdgeInsets.all(8),
               itemCount: plugins.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
                   key: ValueKey("install_item_$index"),
-                  margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                       border: Border.all(
                           color: Theme.of(viewService.context).primaryColorDark,
@@ -72,7 +95,9 @@ Widget buildView(
                     ],
                   ),
                 );
-              })),
+              }),
+        ),
+      ],
     ),
   );
 
