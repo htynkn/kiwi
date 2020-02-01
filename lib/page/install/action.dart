@@ -1,7 +1,7 @@
-import 'package:kiwi/domain/plugin_info.dart';
 import 'package:fish_redux/fish_redux.dart';
+import 'package:kiwi/domain/plugin_info.dart';
 
-enum InstallAction { load, install, finishInstall }
+enum InstallAction { load, install, finishInstall, search }
 
 class InstallActionCreator {
   static Action loadFinish(List<PluginInfo> list) {
@@ -14,5 +14,9 @@ class InstallActionCreator {
 
   static Action finishInstall(Map<String, Object> map) {
     return Action(InstallAction.finishInstall, payload: map);
+  }
+
+  static Action search(String searchText) {
+    return Action(InstallAction.search, payload: searchText);
   }
 }

@@ -14,8 +14,19 @@ Effect<InstallState> buildEffect() {
   return combineEffects(<Object, Effect<InstallState>>{
     Lifecycle.initState: _fetch,
     InstallAction.install: _install,
-    InstallAction.finishInstall: _finishInstall
+    InstallAction.finishInstall: _finishInstall,
+    InstallAction.search: _search
   });
+}
+
+_search(Action action, Context<InstallState> ctx) async {
+  var loader = GetIt.I;
+
+  var pluginProvider = loader.get<PluginProvider>();
+
+  var list = await pluginProvider.search(action.payload);
+
+  ctx.dispatch(InstallActionCreator.loadFinish(list));
 }
 
 _finishInstall(Action action, Context<InstallState> ctx) async {
