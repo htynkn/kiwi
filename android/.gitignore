@@ -8,3 +8,5 @@ GeneratedPluginRegistrant.java
 
 /app/r8-usage.txt
 /app/full-r8-config.txt
+
+key.properties
