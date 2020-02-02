@@ -27,7 +27,8 @@ _startLoad(Action action, Context<ComicSectionState> ctx) async {
     var executor = loader.get<DefaultPluginExecutor>();
 
     var raw = await executor.getRawInfoBy(ctx.state.pluginId);
-    var section = await executor.getSections(raw, ctx.state.url);
+    var section =
+        await executor.getSections(raw, ctx.state.url, ctx.state.name);
 
     ctx.dispatch(ComicSectionActionCreator.finishLoad(section));
   } catch (e) {

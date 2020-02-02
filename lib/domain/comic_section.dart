@@ -26,6 +26,12 @@ class ComicSection {
   static fromJsonString(String jsonString) {
     Map<String, dynamic> map = json.decode(jsonString);
 
+    List<ComicSectionDetail> list = List();
+
+    if (!map.containsKey("sections")) {
+      map["sections"] = list;
+    }
+
     var comicSection = ComicSection.fromJson(map);
 
     return comicSection;

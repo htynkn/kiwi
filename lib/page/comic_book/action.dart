@@ -13,8 +13,13 @@ class ComicBookActionCreator {
         payload: {"name": title, "books": list});
   }
 
-  static Action jumpToSection(int pluginId, String url, String logo) {
-    return Action(ComicBookAction.jumpToSection,
-        payload: {"pluginId": pluginId, "url": url, "logo": logo});
+  static Action jumpToSection(
+      int pluginId, String url, String logo, String name) {
+    return Action(ComicBookAction.jumpToSection, payload: {
+      "pluginId": pluginId,
+      "url": url,
+      "logo": logo,
+      "name": name
+    });
   }
 }

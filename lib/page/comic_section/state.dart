@@ -51,7 +51,7 @@ ComicSectionState initState(Map<String, dynamic> args) {
   comicSectionState.loading = true;
 
   comicSectionState.logo = args["logo"];
-  comicSectionState.name = "";
+  comicSectionState.name = args["name"];
 
   comicSectionState.pluginName = "";
 
