@@ -29,9 +29,15 @@ apply plugin: 'com.google.firebase.firebase-perf'
 apply plugin: 'com.google.firebase.crashlytics'
 
 
-def keystorePropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+def useRelease = true;
+
+if (rootProject.file("key.properties").exists()) {
+    def keystorePropertiesFile = rootProject.file("key.properties")
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    useRelease = false
+}
 
 android {
     compileSdkVersion 28
@@ -55,16 +61,26 @@ android {
     }
 
     signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+        if (useRelease) {
+            release {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+
+                println("Use release signing with file " + keystoreProperties['storeFile']);
+            }
+        } else {
+            println("Use debug sgining")
         }
     }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            if (useRelease) {
+                signingConfig signingConfigs.release
+            } else {
+                signingConfig signingConfigs.debug
+            }
         }
     }
 }
