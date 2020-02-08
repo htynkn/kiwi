@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sited ver="18" debug="0" engine="34" schema="1" private="0">
+    <meta>
+        <ua>Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.26 Safari/537.36
+            Core/1.63.5702.400 QQBrowser/10.2.1893.400
+        </ua>
+        <guid></guid>
+        <title>漫画堆-手机版</title>
+        <author>Ruancx</author>
+        <intro>基本上什么漫画都有，打赏再右上角的F按钮里面，感谢大家支持，,本人也是上班族，大家说的问题能解决的都在周末会解决。已经修改成手机版，出现的问题请说明漫画名字+章节数
+            因为换了地址，所以大家收藏的漫画要重新收藏，谢谢大家了
+        </intro>
+        <url>https://www.manhuadui.com/list</url>
+        <expr>\.manhuadui\.com</expr>
+        <logo>https://mhcdn.manhuazj.com/themes/dmzj/desktop/background/mhd8.jpg</logo>
+        <encode>UTF-8</encode>
+        <about title="反馈" mail="814569501@qq.com">
+            <item txt="邮箱地址" url="814569501@qq.com"/>
+            <item/>
+            <item txt="欢迎打赏插件开发者ruancx，反馈问题。"/>
+            <item txt="点击或扫描二维码对[ruancx]支付宝打赏" expr="https://qr.alipay.com/fkx058399i7k796ndcpqz68"
+                  logo="http://wxt.sinaimg.cn/thumb300/006uSQ4tgy1g6a15skpmlj30ri16sage.jpg"/>
+            <item txt="微信打赏" expr="wxp://f2f0oGUbl5I5lkdzVsbNuJmVRY42I41WhJ4q"
+                  logo="http://wxt.sinaimg.cn/thumb300/006uSQ4tgy1g6a15ud084j30u0155n0l.jpg"/>
+        </about>
+    </meta>
+
+    <main dtype="1" btag="漫画">
+        <home>
+            <hots cache="1d" title="排行" method="get" parse="updates_parse"
+                  url="https://www.manhuadui.com/list/riben/click/"/>
+            <tags title="分类">
+                <tags parse="tagsParse" cache="0" url="https://www.manhuadui.com/list/riben/"/>
+                <tags parse="tagsParse" cache="0" url="https://www.manhuadui.com/list/dalu/"/>
+                <tags parse="tagsParse" cache="0" url="https://www.manhuadui.com/list/hangguo/"/>
+                <!--	<tags parse="tagsParse" cache= "0" url="https://www.manhuadui.com/list/hongkong/"/>
+
+                    <tags parse="tagsParse" cache= "0" url="https://www.manhuadui.com/list/taiwan/"/> -->
+                <tags parse="tagsParse" cache="0" url="https://www.manhuadui.com/list/qita/"/>
+                <tags parse="tagsParse" cache="0" url="https://www.manhuadui.com/list/oumei/"/>
+            </tags>
+        </home>
+        <tag cache="1d" parse="updates_parse" method="get"/>
+        <search cache="0" method="get" parse="searchParse" url="https://www.manhuadui.com/search/?keywords=@key"/>
+        <book cache='1d' method='get' parse='bookParse' header='cookie;referer'>
+            <sections cache="1d" method="get" parse="sectionsParse" header='cookie;referer'/>
+        </book>
+        <section cache='1' method='get' parse='sectionParse' header='cookie;referer'/>
+    </main>
+    <script>
+        <require>
+            <item url="http://cdn.staticfile.org/crypto-js/3.1.9-1/crypto-js.js"/>
+            <item url="http://sited.noear.org/addin/js/cheerio.js" lib="cheerio"/>
+        </require>
+        <code>
+            <![CDATA[
+				var chapterImgs='';
+				var chapterUrl ='';
+
+			function tagsParse(url,html){
+				var $ = cheerio.load(html);
+
+				var data = [];
+				var group = "";
+				if(url.match(/riben/g)){
+					group = "日本";
+
+
+				}else if(url.match(/dalu/g)){
+					group = "大陆";
+
+				}else if(url.match(/hangguo/g)){
+					group = "韩国";
+				}else if(url.match(/taiwan/g)){
+					group = "台湾";
+				}else if(url.match(/oumei/g)){
+					group = "欧美";
+
+				}else if(url.match(/hongkong/g)){
+					group = "香港";
+
+				}else {
+					group = "其他"
+
+				}
+				url = "https://www.manhuadui.com";
+				$("div.filter-item").each(function(i,e){
+					if(i=="2"){
+/*print($(this).toString());
+						print("li:"+$(this).children('ul').children("li").length.toString());
+*/
+						$(this).children('ul').children('li').each(function(i,e){
+								var lies =$(this);
+
+								if(i==0){
+									data.push({
+										group:group,
+										title:lies.children("a").text(),
+										url:url+lies.children("a").attr("href")+"click/@page/"
+									});
+								}else{
+									if(group=="大陆"||group=="日本"){
+										data.push({
+											title:lies.children("a").text(),
+											url:url+lies.children("a").attr("href")+"click/@page/"
+										});
+
+									}
+								}
+							});
+					}
+				});
+				return JSON.stringify(data);
+			}
+
+			function searchParse(url,html){
+				var $ = cheerio.load(html);
+				var data = [];
+				$("div.search_con ul.list_con_li>li").each(function(){
+					var lies = $(this);
+
+
+
+					data.push({
+						name:lies.children("a").eq(0).attr("title"),
+						logo:lies.find("img").attr("src"),
+						url:lies.children("a.image-link").attr("href").replace('www','m')
+
+					});
+
+
+				});
+				return JSON.stringify(data);
+
+			}
+			/*这里需要修改才能适配手机端*/
+			function decrypt20180904(chapterId,chapterName,comicId,comicName) {
+				var key = CryptoJS.enc.Utf8.parse("123456781234567G");
+				var iv = CryptoJS.enc.Utf8.parse('ABCDEF1G34123412');
+				var decrypt = CryptoJS.AES.decrypt(chapterImgs,key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+
+				var decryptedStr = decrypt.toString(CryptoJS.enc.Utf8).replace(/\"|\]|\[|\\/g,'');
+			/*
+				print("解码后数据："+decryptedStr);
+
+			print("chapterUrl :"+chapterUrl);
+				*/
+			var imgs = decryptedStr.replace(/,/g,'$').split('$');
+
+			/*
+				print('length'+imgs.length);
+
+			*/
+				var data= [];
+
+				if(chapterUrl!=''){
+
+
+				for(var i=0;i<imgs.length;i++){
+						if(imgs[i].indexOf('http')>-1){
+
+							if(imgs[i][4]==":"){
+							/*
+								print("进入这个方法里面3 "+imgs[i]);
+							*/
+
+								var tmp =imgs[i];
+								imgs[i]=tmp.slice(0,4)+'s'+tmp.slice(4,tmp.length);
+
+							/*
+								print('imgs= '+imgs[i]);
+							*/
+							}
+							data.push(imgs[i]);
+							/*
+							print(imgs[i]);
+							*/
+						}else{
+							data.push("https://search.pstatic.net/common?src="+"http://img001.eshanyao.com/"+chapterUrl+imgs[i]);
+						/*	print("https://search.pstatic.net/common?src="+"http://img001.eshanyao.com/"+chapterUrl+imgs[i]);*/
+
+						}
+					}
+				}else{
+					for(var i=0;i<imgs.length;i++){
+
+						/*
+						data.push( imgs[i].replace(/\\/g,''));
+						print(imgs[i].replace(/\\/g,''));
+						*/
+
+						if(imgs[i].match(/^https?:\/\/(images.dmzj.com|imgsmall.dmzj.com)/i)){
+							data.push('https://mhimg.eshanyao.com/showImage.php?url='+imgs[i]);
+							/*
+							print('https://mhimg.eshanyao.com/showImage.php?url='+imgs[i]);
+							*/
+						}else{
+						print("进入这里了");
+						/*
+
+							print("imgs="+chapterUrl + imgs[i].replace(/\\/g,''));
+							*/
+						data.push( imgs[i]);
+
+					}
+					}
+
+					/*if(imgs[i].indexOf('http://images.dmzj.com')>-1){
+							data.push('https://mhimg.eshanyao.com/showImage.php?url='+imgs[i]);
+							print('https://mhimg.eshanyao.com/showImage.php?url='+imgs[i]);
+						}*/
+				}
+				/*
+				print("data : "+data);
+			       */
+				 return JSON.stringify(data);
+			}
+			/*这里需要修改才能适配手机端*/
+			function sectionParse(url , html){
+				var chapter;
+				var js;
+
+			/*	print(html);*/
+				var $ = cheerio.load(html,{decodeEntities:false});
+			/*电脑端
+				var chapter = $('script').eq(2).text();
+				 $('script').each(function(){
+						var lie  = $(this);
+						print('lie:'+lie.text());
+				 });
+			*/
+			/*手机端*/
+
+
+
+				$('script').each(function(){
+						var lie  = $(this);
+
+						if(lie.text().indexOf('chapterImages')>-1){
+						    chapter = lie.text();
+						    }
+						if(lie.text().indexOf('decrypt')>-1){
+						    js = lie.text();
+						}
+
+				 });
+				 /*
+				 	print('chapter: '+chapter);
+				    print('js :'+js);
+				*/
+
+
+			    	eval(chapter);
+
+
+			    chapterImgs =chapterImages;
+				chapterUrl = chapterPath;
+
+			  	/*
+
+				print('cimgs : '+chapterImgs);
+				print('url :'+chapterUrl);
+		*/
+				var reg =/decrypt[0-9\"\"\,\(\)\s\u4e00-\u9fa5\;\x21-\x7e《》（）【】，。、？；：|“”‘’]*/g;
+			/*电脑端
+				var f = js.split(";")[5]; */
+			/*手机端*/
+				var f = js.split(";")[1];
+			/*
+				print("为解码前的方法"+js);
+				print("解码方法"+f);
+			*/
+
+
+				var data = eval(f);
+				return data;
+
+			}
+
+            function updates_parse(url,html){
+                 var $=cheerio.load(html,{decodeEntities:false});
+                var list=[];
+
+
+			   $('ul.list_con_li.clearfix>li').each(function(){
+					var lie  = $(this);
+					list.push({
+						name: lie.find("h3>a").text(),
+						url: lie.find("a").eq(0).attr("href").replace('www','m'),
+						logo:lie.find("img").attr("src")
+					});
+				});
+				return JSON.stringify(list);
+            }
+
+
+			function sectionsParse(url,html){
+				var $ = cheerio.load(html);
+				var data = {};
+				var sections = [];
+
+				/*$('div.zj_list_con.autoHeight>ul li') 电脑端*/
+				/*手机端*/
+				$('div.chapter-warp>ul li').each(
+				function(){
+					var lies  = $(this);
+					/*
+					print(lies.children('a').attr('title')||'null');
+					print(lies.children('a').text().trim());
+					*/
+					sections.push({
+						name:lies.children('a').attr('title')||lies.children('a').text().trim().replace(/\s/g,''),
+						url: 'https://m.manhuadui.com'+lies.children('a').attr('href')
+					});
+				});
+				data.sections = sections;
+				return JSON.stringify(data);
+			}
+			function bookParse(url,html){
+				var $ = cheerio.load(html);
+				var data = {};
+				data.author = $('ul.comic_deCon_liO>li').children('a').text();
+				data.logo = $('div.comic_i_img').children('img').attr('src');
+				data.isSectionsAsc=1;
+
+				var sections = [];
+				return JSON.stringify(data);
+
+			}
+
+
+
+]]>
+        </code>
+    </script>
+</sited>
