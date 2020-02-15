@@ -24,9 +24,11 @@ _search(Action action, Context<InstallState> ctx) async {
 
   var pluginProvider = loader.get<PluginProvider>();
 
-  var list = await pluginProvider.search(action.payload);
+  String keyWord = action.payload;
 
-  ctx.dispatch(InstallActionCreator.loadFinish(list));
+  var list = await pluginProvider.search(keyWord);
+
+  ctx.dispatch(InstallActionCreator.loadFinish(keyWord, list));
 }
 
 _finishInstall(Action action, Context<InstallState> ctx) async {
@@ -41,7 +43,7 @@ Future<void> _fetch(Action action, Context<InstallState> ctx) async {
 
   var list = await pluginProvider.list(1, 200);
 
-  ctx.dispatch(InstallActionCreator.loadFinish(list));
+  ctx.dispatch(InstallActionCreator.loadFinish("", list));
 }
 
 Future<void> _install(Action action, Context<InstallState> ctx) async {

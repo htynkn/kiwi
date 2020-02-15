@@ -4,8 +4,9 @@ import 'package:kiwi/domain/plugin_info.dart';
 enum InstallAction { load, install, finishInstall, search }
 
 class InstallActionCreator {
-  static Action loadFinish(List<PluginInfo> list) {
-    return Action(InstallAction.load, payload: list);
+  static Action loadFinish(String keyWord, List<PluginInfo> list) {
+    return Action(InstallAction.load,
+        payload: {"keyWord": keyWord, "list": list});
   }
 
   static Action install(Map<String, String> map) {
