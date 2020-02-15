@@ -22,7 +22,8 @@ Effect<InstallState> buildEffect() {
 _search(Action action, Context<InstallState> ctx) async {
   var loader = GetIt.I;
 
-  var pluginProvider = loader.get<PluginProvider>();
+  var pluginProvider =
+      loader.get<PluginProvider>(ctx.state.providerType.toString());
 
   String keyWord = action.payload;
 
@@ -39,7 +40,8 @@ _finishInstall(Action action, Context<InstallState> ctx) async {
 Future<void> _fetch(Action action, Context<InstallState> ctx) async {
   var loader = GetIt.I;
 
-  var pluginProvider = loader.get<PluginProvider>();
+  var pluginProvider =
+      loader.get<PluginProvider>(ctx.state.providerType.toString());
 
   var list = await pluginProvider.list(1, 200);
 
@@ -49,7 +51,7 @@ Future<void> _fetch(Action action, Context<InstallState> ctx) async {
 Future<void> _install(Action action, Context<InstallState> ctx) async {
   var loader = GetIt.I;
 
-  var pluginProvider = loader.get<PluginProvider>();
+  var pluginProvider = loader.get<PluginProvider>(ctx.state.providerType.toString());
   var pluginManager = loader.get<PluginManager>();
   var loggingService = loader.get<LoggingService>();
 

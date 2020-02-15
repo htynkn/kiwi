@@ -1,7 +1,8 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 
-enum InstallAction { load, install, finishInstall, search }
+enum InstallAction { load, install, finishInstall, search, switchProvider }
 
 class InstallActionCreator {
   static Action loadFinish(String keyWord, List<PluginInfo> list) {
@@ -19,5 +20,9 @@ class InstallActionCreator {
 
   static Action search(String searchText) {
     return Action(InstallAction.search, payload: searchText);
+  }
+
+  static Action switchProvider(PluginProviderType type) {
+    return Action(InstallAction.switchProvider, payload: type);
   }
 }

@@ -30,7 +30,8 @@ class DioHttpService extends HttpService {
   Future<String> get(String url,
       {String ua,
       Duration duration = const Duration(minutes: 1),
-      String referer}) async {
+      String referer,
+      String requestedWith}) async {
     var uuid = await analysisService.startHttpMetric(url, HttpMethod.Get);
 
     try {
@@ -43,6 +44,11 @@ class DioHttpService extends HttpService {
       if (isNotEmpty(referer)) {
         cacheOption.headers
             .putIfAbsent(HttpHeaders.refererHeader, () => referer);
+      }
+
+      if (isNotEmpty(requestedWith)) {
+        cacheOption.headers
+            .putIfAbsent("X-Requested-With", () => requestedWith);
       }
 
       cacheOption.sendTimeout = 3000;

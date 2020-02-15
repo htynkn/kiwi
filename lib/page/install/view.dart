@@ -2,6 +2,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kiwi/component/loading.dart';
+import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/page/install/action.dart';
 
 import 'state.dart';
@@ -101,10 +102,34 @@ Widget buildView(
     ),
   );
 
+  void _select(dynamic c) {
+    dispatch(InstallActionCreator.switchProvider(c));
+  }
+
   return Scaffold(
       appBar: AppBar(
         title: const Text('插件安装'),
         backgroundColor: Theme.of(viewService.context).primaryColor,
+        actions: <Widget>[
+          PopupMenuButton(
+            tooltip: "选择插件来源",
+            onSelected: _select,
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: PluginProviderType.Sited,
+                  child: Text(PluginProviderTypeHelper.getValue(
+                      PluginProviderType.Sited)),
+                ),
+                PopupMenuItem(
+                  value: PluginProviderType.Ka94,
+                  child: Text(PluginProviderTypeHelper.getValue(
+                      PluginProviderType.Ka94)),
+                )
+              ];
+            },
+          ),
+        ],
       ),
       body: state.loading
           ? Loading.normalLoading(viewService)

@@ -17,29 +17,14 @@ Widget buildView(
   var books = state.comicBooks;
   var theme = Theme.of(viewService.context);
 
-  return WillPopScope(
-    onWillPop: () async {
-      if (state.loading) {
-        Fluttertoast.showToast(
-            msg: "加载中，请耐心等待",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIos: 1,
-            backgroundColor: Theme.of(viewService.context).backgroundColor,
-            fontSize: 16.0);
-        return Future.value(false);
-      }
-      return Future.value(true);
-    },
-    child: Scaffold(
-        appBar: AppBar(
-          title: Text(state.name),
-          backgroundColor: theme.primaryColor,
-        ),
-        body: state.loading
-            ? Loading.normalLoading(viewService)
-            : renderComicBooks(state, books, theme, viewService, dispatch)),
-  );
+  return Scaffold(
+      appBar: AppBar(
+        title: Text(state.name),
+        backgroundColor: theme.primaryColor,
+      ),
+      body: state.loading
+          ? Loading.normalLoading(viewService)
+          : renderComicBooks(state, books, theme, viewService, dispatch));
 }
 
 Container renderComicBooks(ComicBookState state, List<ComicBook> books,

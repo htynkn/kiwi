@@ -5,8 +5,10 @@ import 'package:kiwi/core/js_engine_service.dart';
 import 'package:kiwi/core/logging_service.dart';
 import 'package:kiwi/core/plugin_provider.dart';
 import 'package:kiwi/domain/enum/js_engine_type.dart';
+import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/service/adapter/js_engine_adapter.dart';
 import 'package:kiwi/service/firebase_analysis_service.dart';
+import 'package:kiwi/service/ka94_plugin_provider.dart';
 import 'package:kiwi/service/rhino_js_engine_service.dart';
 import 'package:kiwi/service/simple_logging_service.dart';
 import 'package:kiwi/service/sited_plugin_provider.dart';
@@ -49,8 +51,15 @@ class IocConfiguration {
     loader.registerLazySingleton<HttpService>((() => DioHttpService(
         loader.get<AnalysisService>(), loader.get<LoggingService>())));
 
-    loader.registerLazySingleton<PluginProvider>((() => SitedPluginProvider(
-        loader.get<HttpService>(), loader.get<LoggingService>())));
+    loader.registerLazySingleton<PluginProvider>(
+        (() => SitedPluginProvider(
+            loader.get<HttpService>(), loader.get<LoggingService>())),
+        instanceName: PluginProviderType.Sited.toString());
+
+    loader.registerLazySingleton<PluginProvider>(
+        (() => Ka94PluginProvider(
+            loader.get<HttpService>(), loader.get<LoggingService>())),
+        instanceName: PluginProviderType.Ka94.toString());
 
     loader.registerLazySingleton<PluginManager>(
         () => DefaultPluginManager(loader.get()));

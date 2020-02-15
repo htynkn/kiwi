@@ -6,6 +6,7 @@ import 'package:kiwi/core/logging_service.dart';
 import 'package:kiwi/core/plugin_provider.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 import 'package:kiwi/exception/http_exception.dart';
+import 'package:kiwi/util/decryption_util.dart';
 
 class SitedPluginProvider extends PluginProvider {
   HttpService httpService;
@@ -16,7 +17,9 @@ class SitedPluginProvider extends PluginProvider {
 
   @override
   list([int pageNum = 1, int pageSize = 20]) async {
-    var html = await this.httpService.get("http://sited.noear.org/?tag=1");
+    var html = await this.httpService.get("http://sited.noear.org/?tag=1",
+        ua: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36",
+        referer: "http://sited.noear.org/");
     if (html != null) {
       var document = parse(html);
 
@@ -81,39 +84,7 @@ class SitedPluginProvider extends PluginProvider {
 
     var pluginString = await this.httpService.get(remoteUrl);
 
-    int start = pluginString.indexOf("::") + 2;
-    int end = pluginString.lastIndexOf("::");
-    String txt = pluginString.substring(start, end);
-    String key = pluginString.substring(end + 2);
-
-    StringBuffer sb = new StringBuffer();
-    for (int i = 0, len = txt.length; i < len; i++) {
-      if (i % 2 == 0) {
-        sb.write(txt[i]);
-      }
-    }
-
-    txt = sb.toString();
-    txt = utf8.decode(base64.decode(txt));
-    key = key + "ro4w78Jx";
-
-    var data = utf8.encode(txt);
-    var keyData = utf8.encode(key);
-
-    int keyIndex = 0;
-
-    for (int x = 0; x < data.length; x++) {
-      data[x] = (data[x] ^ keyData[keyIndex]);
-      keyIndex += 1;
-
-      if (keyIndex == keyData.length) {
-        keyIndex = 0;
-      }
-    }
-
-    txt = utf8.decode(data);
-
-    txt = utf8.decode(base64.decode(txt));
+    String txt = DecryptionUtil.decryption(pluginString);
 
     return Future.value(txt);
   }

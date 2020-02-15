@@ -1,16 +1,19 @@
 import 'package:fish_redux/fish_redux.dart';
+import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 
 class InstallState implements Cloneable<InstallState> {
   List<PluginInfo> pluginsInfo;
   String searchKey = "";
   bool loading = true;
+  PluginProviderType providerType = PluginProviderType.Ka94;
 
   @override
   InstallState clone() {
     return InstallState()
       ..pluginsInfo = pluginsInfo
       ..searchKey = searchKey
+      ..providerType = providerType
       ..loading = loading;
   }
 }
