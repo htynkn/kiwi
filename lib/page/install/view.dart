@@ -18,7 +18,20 @@ Widget buildView(
     padding: const EdgeInsets.all(10.0),
     child: Column(
       children: <Widget>[
+        Text(
+          "当前插件:" + PluginProviderTypeHelper.getValue(state.providerType),
+          style: TextStyle(
+              fontSize: 10,
+              color: Theme.of(viewService.context).highlightColor),
+        ),
         Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(viewService.context).primaryColorDark,
+                  width: 1.0,
+                  style: BorderStyle.solid)),
+          margin: EdgeInsets.only(bottom: 8, top: 8),
+          padding: EdgeInsets.only(left: 5, right: 5, bottom: 2),
           child: Row(
             children: <Widget>[
               Flexible(
