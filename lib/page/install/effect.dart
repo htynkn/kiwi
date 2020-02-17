@@ -15,18 +15,22 @@ Effect<InstallState> buildEffect() {
     Lifecycle.initState: _fetch,
     InstallAction.install: _install,
     InstallAction.finishInstall: _finishInstall,
-    InstallAction.search: _search
+    InstallAction.search: _search,
+    InstallAction.switchProvider: _switchProvider
   });
 }
 
 _search(Action action, Context<InstallState> ctx) async {
   var loader = GetIt.I;
 
-  var pluginProvider = loader.get<PluginProvider>();
+  var pluginProvider =
+      loader.get<PluginProvider>(ctx.state.providerType.toString());
 
-  var list = await pluginProvider.search(action.payload);
+  String keyWord = action.payload;
 
-  ctx.dispatch(InstallActionCreator.loadFinish(list));
+  var list = await pluginProvider.search(keyWord);
+
+  ctx.dispatch(InstallActionCreator.loadFinish(keyWord, list));
 }
 
 _finishInstall(Action action, Context<InstallState> ctx) async {
@@ -34,20 +38,34 @@ _finishInstall(Action action, Context<InstallState> ctx) async {
   ctx.dispatch(HomeActionCreator.reload());
 }
 
-Future<void> _fetch(Action action, Context<InstallState> ctx) async {
+_switchProvider(Action action, Context<InstallState> ctx) async {
+  ctx.dispatch(InstallActionCreator.startSwitchProvider(action.payload));
+
   var loader = GetIt.I;
 
-  var pluginProvider = loader.get<PluginProvider>();
+  var pluginProvider = loader.get<PluginProvider>(action.payload.toString());
 
   var list = await pluginProvider.list(1, 200);
 
-  ctx.dispatch(InstallActionCreator.loadFinish(list));
+  ctx.dispatch(InstallActionCreator.loadFinish("", list, type: action.payload));
+}
+
+Future<void> _fetch(Action action, Context<InstallState> ctx) async {
+  var loader = GetIt.I;
+
+  var pluginProvider =
+      loader.get<PluginProvider>(ctx.state.providerType.toString());
+
+  var list = await pluginProvider.list(1, 200);
+
+  ctx.dispatch(InstallActionCreator.loadFinish("", list));
 }
 
 Future<void> _install(Action action, Context<InstallState> ctx) async {
   var loader = GetIt.I;
 
-  var pluginProvider = loader.get<PluginProvider>();
+  var pluginProvider =
+      loader.get<PluginProvider>(ctx.state.providerType.toString());
   var pluginManager = loader.get<PluginManager>();
   var loggingService = loader.get<LoggingService>();
 

@@ -2,6 +2,7 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kiwi/component/loading.dart';
+import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/page/install/action.dart';
 
 import 'state.dart';
@@ -17,7 +18,20 @@ Widget buildView(
     padding: const EdgeInsets.all(10.0),
     child: Column(
       children: <Widget>[
+        Text(
+          "当前插件:" + PluginProviderTypeHelper.getValue(state.providerType),
+          style: TextStyle(
+              fontSize: 10,
+              color: Theme.of(viewService.context).highlightColor),
+        ),
         Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(viewService.context).primaryColorDark,
+                  width: 1.0,
+                  style: BorderStyle.solid)),
+          margin: EdgeInsets.only(bottom: 8, top: 8),
+          padding: EdgeInsets.only(left: 5, right: 5, bottom: 2),
           child: Row(
             children: <Widget>[
               Flexible(
@@ -101,10 +115,34 @@ Widget buildView(
     ),
   );
 
+  void _select(dynamic c) {
+    dispatch(InstallActionCreator.switchProvider(c));
+  }
+
   return Scaffold(
       appBar: AppBar(
         title: const Text('插件安装'),
         backgroundColor: Theme.of(viewService.context).primaryColor,
+        actions: <Widget>[
+          PopupMenuButton(
+            tooltip: "选择插件来源",
+            onSelected: _select,
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: PluginProviderType.Sited,
+                  child: Text(PluginProviderTypeHelper.getValue(
+                      PluginProviderType.Sited)),
+                ),
+                PopupMenuItem(
+                  value: PluginProviderType.Ka94,
+                  child: Text(PluginProviderTypeHelper.getValue(
+                      PluginProviderType.Ka94)),
+                )
+              ];
+            },
+          ),
+        ],
       ),
       body: state.loading
           ? Loading.normalLoading(viewService)
