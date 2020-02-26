@@ -13,7 +13,8 @@ Effect<HomePageState> buildEffect() {
     HomeAction.reload: _startLoad,
     HomeAction.startLoad: _startLoad,
     HomeAction.clickBook: _clickBook,
-    HomeAction.jumpToInstall: _jumpToInstall
+    HomeAction.jumpToInstall: _jumpToInstall,
+    HomeAction.deletePlugin: _deletePlugin
   });
 }
 
@@ -37,4 +38,16 @@ Future<void> _startLoad(Action action, Context<HomePageState> ctx) async {
 
 void _jumpToInstall(Action action, Context<HomePageState> ctx) {
   Navigator.of(ctx.context).pushNamed('install', arguments: null);
+}
+
+Future<void> _deletePlugin(Action action, Context<HomePageState> ctx) async {
+  var pluginId = action.payload;
+
+  var loader = GetIt.I;
+
+  var pluginManager = loader.get<PluginManager>();
+
+  await pluginManager.deleteById(pluginId);
+
+  await _startLoad(action, ctx);
 }

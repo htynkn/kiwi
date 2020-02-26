@@ -76,6 +76,29 @@ Widget pluginItemContainer(
       onTap: () {
         dispatch(HomeActionCreator.clickBook(plugin.id));
       },
+      onLongPress: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("提示"),
+                content: Text("确定要删除【" + plugin.name + "】吗?"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("取消"),
+                    onPressed: () => Navigator.of(context).pop(), //关闭对话框
+                  ),
+                  FlatButton(
+                    child: Text("删除"),
+                    onPressed: () {
+                      dispatch(HomeActionCreator.deletePlugin(plugin.id));
+                      Navigator.of(context).pop(true); //关闭对话框
+                    },
+                  ),
+                ],
+              );
+            });
+      },
       child: Container(
         key: ValueKey("home_item_${plugin.id}"),
         margin: EdgeInsets.all(5),

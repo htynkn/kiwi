@@ -9,4 +9,5 @@ abstract class PluginManager {
   Future<void> refresh();
   Future<int> install(PluginInfo info, String xmlContent);
   Future<Plugin> getById(int id);
+  Future<void> deleteById(pluginId);
 }

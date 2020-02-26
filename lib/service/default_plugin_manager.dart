@@ -103,4 +103,16 @@ class DefaultPluginManager extends PluginManager {
 
     return plugin;
   }
+
+  @override
+  Future<void> deleteById(pluginId) async {
+    var db = await openDB();
+
+    var store = intMapStoreFactory.store('plugins');
+
+    var result = await store.delete(db,
+        finder: Finder(filter: Filter.equals(Field.key, pluginId)));
+
+    return result > 0;
+  }
 }
