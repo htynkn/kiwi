@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:basic_utils/basic_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/js_engine_service.dart';
@@ -157,7 +158,7 @@ class DefaultPluginExecutor {
     return Future.value(books);
   }
 
-  getSections(RawPluginInfo pluginInfo, String url) async {
+  getSections(RawPluginInfo pluginInfo, String url, String sectionName) async {
     var code = pluginInfo.script.code;
 
     for (var url in pluginInfo.script.requireList) {
@@ -235,6 +236,10 @@ class DefaultPluginExecutor {
 
         comicSection.sections.addAll(tempSection.sections);
       }
+    }
+
+    if (StringUtils.isNullOrEmpty(comicSection.name)) {
+      comicSection.name = sectionName;
     }
 
     return Future.value(comicSection);

@@ -36,7 +36,7 @@ Container renderComicBooks(ComicBookState state, List<ComicBook> books,
       splashColor: theme.primaryColor,
       onTap: () {
         dispatch(ComicBookActionCreator.jumpToSection(
-            state.pluginId, book.url, book.logo));
+            state.pluginId, book.url, book.logo, book.name));
       },
       child: Center(
           child: Column(
