@@ -39,7 +39,7 @@ jobs:
       - uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      - run: flutter build apk --build-name ${{ steps.gitversion.outputs.fullSemVer }} --build-number ${{ steps.gitversion.outputs.buildMetaData }} -PisCI=true
+      - run: flutter build apk --build-name ${{ steps.gitversion.outputs.fullSemVer }} --build-number ${{ steps.gitversion.outputs.buildMetaData }}
       - name: upload artifact to Firebase App Distribution
         if: github.ref == 'refs/heads/master'
         uses: wzieba/Firebase-Distribution-Github-Action@v1.1.1
