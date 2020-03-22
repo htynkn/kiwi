@@ -7,6 +7,7 @@ import 'package:kiwi/core/plugin_provider.dart';
 import 'package:kiwi/domain/enum/js_engine_type.dart';
 import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/service/adapter/js_engine_adapter.dart';
+import 'package:kiwi/service/file_plugin_provider.dart';
 import 'package:kiwi/service/firebase_analysis_service.dart';
 import 'package:kiwi/service/ka94_plugin_provider.dart';
 import 'package:kiwi/service/rhino_js_engine_service.dart';
@@ -60,6 +61,10 @@ class IocConfiguration {
         (() => Ka94PluginProvider(
             loader.get<HttpService>(), loader.get<LoggingService>())),
         instanceName: PluginProviderType.Ka94.toString());
+
+    loader.registerLazySingleton<PluginProvider>(
+        (() => FilePluginProvider(loader.get<LoggingService>())),
+        instanceName: PluginProviderType.File.toString());
 
     loader.registerLazySingleton<PluginManager>(
         () => DefaultPluginManager(loader.get()));

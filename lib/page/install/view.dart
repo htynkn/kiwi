@@ -1,9 +1,13 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kiwi/component/loading.dart';
 import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/page/install/action.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'state.dart';
 
@@ -14,7 +18,53 @@ Widget buildView(
   TextEditingController searchInputController =
       new TextEditingController(text: state.searchKey ?? "");
 
-  var renderInstallList = Container(
+  var renderFileInstallView = Container(
+    padding: const EdgeInsets.all(10.0),
+    child: Column(
+      children: <Widget>[
+        Text(
+          "当前插件:" + PluginProviderTypeHelper.getValue(state.providerType),
+          style: TextStyle(
+              fontSize: 10,
+              color: Theme.of(viewService.context).highlightColor),
+        ),
+        Container(
+          decoration: BoxDecoration(
+              border: Border.all(
+                  color: Theme.of(viewService.context).primaryColorDark,
+                  width: 1.0,
+                  style: BorderStyle.solid)),
+          margin: EdgeInsets.only(bottom: 8, top: 8),
+          padding: EdgeInsets.only(left: 5, right: 5, bottom: 2),
+          child: Row(
+            children: <Widget>[
+              Text("选择文件"),
+              RaisedButton(
+                  child: Text("打开"),
+                  onPressed: () async {
+                    PermissionStatus permission = await PermissionHandler()
+                        .checkPermissionStatus(PermissionGroup.storage);
+
+                    if (permission != PermissionStatus.granted) {
+                      await PermissionHandler()
+                          .requestPermissions([PermissionGroup.storage]);
+                      File file = await FilePicker.getFile(
+                          type: FileType.custom, fileExtension: 'xml');
+
+                      dispatch(InstallActionCreator.install({
+                        "remoteUrl": file.path,
+                        "name": ""
+                      }));
+                    }
+                  })
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+
+  var renderRemoteInstallView = Container(
     padding: const EdgeInsets.all(10.0),
     child: Column(
       children: <Widget>[
@@ -138,6 +188,11 @@ Widget buildView(
                   value: PluginProviderType.Ka94,
                   child: Text(PluginProviderTypeHelper.getValue(
                       PluginProviderType.Ka94)),
+                ),
+                PopupMenuItem(
+                  value: PluginProviderType.File,
+                  child: Text(PluginProviderTypeHelper.getValue(
+                      PluginProviderType.File)),
                 )
               ];
             },
@@ -146,5 +201,7 @@ Widget buildView(
       ),
       body: state.loading
           ? Loading.normalLoading(viewService)
-          : renderInstallList);
+          : state.providerType == PluginProviderType.File
+              ? renderFileInstallView
+              : renderRemoteInstallView);
 }
