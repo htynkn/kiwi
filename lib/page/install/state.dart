@@ -6,7 +6,7 @@ class InstallState implements Cloneable<InstallState> {
   List<PluginInfo> pluginsInfo;
   String searchKey = "";
   bool loading = true;
-  PluginProviderType providerType = PluginProviderType.Sited;
+  PluginProviderType providerType = PluginProviderType.File;
 
   @override
   InstallState clone() {

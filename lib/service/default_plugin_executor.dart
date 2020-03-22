@@ -25,12 +25,22 @@ class DefaultPluginExecutor {
 
   DefaultPluginExecutor(this.manager, this.httpService, this.jsEngineService);
 
+  Future<RawPluginInfo> getRawInfoContent(String xmlContent){
+    var rawPluginInfo = RawPluginInfo();
+
+    return parsePlugin(xmlContent, rawPluginInfo);
+  }
+
   Future<RawPluginInfo> getRawInfoBy(int id) async {
     var plugin = await manager.getById(id);
     var rawPluginInfo = RawPluginInfo();
 
     var xmlContent = plugin.content;
 
+    return parsePlugin(xmlContent, rawPluginInfo);
+  }
+
+  Future<RawPluginInfo> parsePlugin(String xmlContent, RawPluginInfo rawPluginInfo) {
     var document = xml.parse(xmlContent);
 
     var sited = _findFirstElement(document, "sited", alias: "site");

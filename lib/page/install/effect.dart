@@ -1,3 +1,4 @@
+import 'package:basic_utils/basic_utils.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:get_it/get_it.dart';
@@ -6,6 +7,7 @@ import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/core/plugin_provider.dart';
 import 'package:kiwi/domain/plugin_info.dart';
 import 'package:kiwi/page/home/action.dart';
+import 'package:kiwi/service/default_plugin_executor.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -75,6 +77,11 @@ Future<void> _install(Action action, Context<InstallState> ctx) async {
   String remoteUrl = action.payload["remoteUrl"];
 
   String xmlContent = await pluginProvider.download(remoteUrl);
+
+  if (StringUtils.isNullOrEmpty(name)) {
+    DefaultPluginExecutor executor = loader.get<DefaultPluginExecutor>();
+    name = (await executor.getRawInfoContent(xmlContent)).meta?.title;
+  }
 
   var pluginId = await pluginManager.install(PluginInfo(name, ""), xmlContent);
 
