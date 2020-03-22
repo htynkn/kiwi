@@ -16,8 +16,13 @@ buildscript {
 
 allprojects {
     repositories {
-        maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
-        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        if (project.hasProperty("isCI")) {
+            google()
+            jcenter()
+        } else {
+            maven { url 'http://maven.aliyun.com/nexus/content/repositories/google' }
+            maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        }
     }
 }
 

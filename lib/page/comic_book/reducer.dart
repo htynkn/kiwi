@@ -7,9 +7,14 @@ Reducer<ComicBookState> buildReducer() {
   return asReducer(
     <Object, Reducer<ComicBookState>>{
       ComicBookAction.finishLoad: _onFinishLoad,
-      ComicBookAction.startLoad: _onStartLoad
+      ComicBookAction.startLoad: _onStartLoad,
+      ComicBookAction.changeTabIndex: _onChangeTabIndex
     },
   );
+}
+
+ComicBookState _onChangeTabIndex(ComicBookState state, Action action) {
+  return state.clone()..tabIndex = action.payload;
 }
 
 ComicBookState _onFinishLoad(ComicBookState state, Action action) {
@@ -18,6 +23,8 @@ ComicBookState _onFinishLoad(ComicBookState state, Action action) {
   newState.loading = false;
   newState.comicBooks = action.payload["books"];
   newState.name = action.payload["name"];
+  newState.homeName = action.payload["homeName"];
+  newState.tagName = action.payload["tagName"];
 
   return newState;
 }
