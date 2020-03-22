@@ -9,8 +9,6 @@ import 'package:quiver/strings.dart';
 
 import 'state.dart';
 
-final ratio = 3 / 5;
-
 Widget buildView(
     ComicBookState state, Dispatch dispatch, ViewService viewService) {
   var theme = Theme.of(viewService.context);
@@ -30,8 +28,30 @@ Widget buildView(
 
 renderComicTagPage(
     ComicBookState state, ThemeData theme, ViewService viewService, dispatch) {
+  var comicTags = state.comicTags;
+
+  List<Widget> widgets = List();
+
+  for (var comicTag in comicTags.list) {
+    widgets.add(Container(
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(
+                color: Theme.of(viewService.context).primaryColorDark,
+                style: BorderStyle.solid)),
+        child: Center(child: Text(comicTag.name))));
+  }
+
   return Container(
-    child: Text("tags"),
+    padding: const EdgeInsets.all(2.0),
+    child: LogConsoleOnShake(
+      child: Center(
+          child: GridView.count(
+        crossAxisCount: 4,
+        children: widgets,
+      )),
+    ),
   );
 }
 

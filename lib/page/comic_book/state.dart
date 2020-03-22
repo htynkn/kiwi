@@ -1,10 +1,12 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:kiwi/domain/comic_book.dart';
+import 'package:kiwi/domain/comic_tags.dart';
 
 class ComicBookState implements Cloneable<ComicBookState> {
   int pluginId;
   String name;
   List<ComicBook> comicBooks;
+  ComicTags comicTags;
   bool loading = true;
   String homeName;
   String tagName;
@@ -19,6 +21,7 @@ class ComicBookState implements Cloneable<ComicBookState> {
       ..homeName = homeName
       ..tagName = tagName
       ..tabIndex = tabIndex
+      ..comicTags = comicTags
       ..comicBooks = comicBooks;
   }
 }
@@ -28,6 +31,7 @@ ComicBookState initState(Map<String, dynamic> args) {
 
   comicBookState.pluginId = args["pluginId"];
   comicBookState.comicBooks = List();
+  comicBookState.comicTags = ComicTags();
   comicBookState.name = "";
 
   return comicBookState;

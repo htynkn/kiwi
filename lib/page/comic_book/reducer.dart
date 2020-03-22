@@ -25,6 +25,7 @@ ComicBookState _onFinishLoad(ComicBookState state, Action action) {
   newState.name = action.payload["name"];
   newState.homeName = action.payload["homeName"];
   newState.tagName = action.payload["tagName"];
+  newState.comicTags = action.payload["tags"];
 
   return newState;
 }
