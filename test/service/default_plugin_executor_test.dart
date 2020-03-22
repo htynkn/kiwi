@@ -181,18 +181,18 @@ void main() {
       expect(list, isNotEmpty);
     });
 
-    test("test_get_tags", () async {
-      var fileContent = await TestUtil.loadFile("issue_1_plugin.xml");
-
-      var id = await pluginManager.install(PluginInfo("测试", ""), fileContent);
-
-      expect(id, greaterThan(0));
-
-      var raw = await executor.getRawInfoBy(id);
-
-      var list = await executor.getComicTags(raw);
-
-      expect(list, isNotEmpty);
-    });
+//    test("test_get_tags", () async {
+//      var fileContent = await TestUtil.loadFile("issue_1_plugin.xml");
+//
+//      var id = await pluginManager.install(PluginInfo("测试", ""), fileContent);
+//
+//      expect(id, greaterThan(0));
+//
+//      var raw = await executor.getRawInfoBy(id);
+//
+//      var list = await executor.getComicTags(raw);
+//
+//      expect(list, isNotEmpty);
+//    });
   });
 }
