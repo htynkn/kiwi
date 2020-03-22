@@ -155,6 +155,12 @@ void main() {
       when(mockHttpService.get(argThat(equals("https://www.tohomh123.com/")),
               ua: anyNamed("ua"), duration: anyNamed("duration")))
           .thenAnswer((_) => Future.value(tohomh123Html));
+
+      var tohomh123TagsHtml = await TestUtil.loadFile("tohomh123-tags.html");
+
+      when(mockHttpService.get(argThat(equals("https://www.tohomh123.com/f-1------updatetime--1.html")),
+          ua: anyNamed("ua"), duration: anyNamed("duration")))
+          .thenAnswer((_) => Future.value(tohomh123TagsHtml));
     });
 
     tearDown(() {
@@ -173,6 +179,20 @@ void main() {
       var list = await executor.getComicBooks(raw);
 
       expect(list, isNotEmpty);
+    });
+
+    test("test_get_tags", () async {
+      var fileContent = await TestUtil.loadFile("issue_1_plugin.xml");
+
+      var id = await pluginManager.install(PluginInfo("测试", ""), fileContent);
+
+      expect(id, greaterThan(0));
+
+      var raw = await executor.getRawInfoBy(id);
+
+      var tags = await executor.getComicTags(raw);
+
+      expect(tags, isNotNull);
     });
   });
 }

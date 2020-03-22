@@ -36,7 +36,22 @@ class RawPluginMainInfo {
 
   RawPluginMainBookInfo book;
 
+  RawPluginMainTagsInfo tags;
+
   RawPluginMainSectionInfo section;
+}
+
+class RawPluginMainTagsInfo {
+  String title;
+
+  List<RawPluginMainHostInfo> tags;
+
+  List<RawPluginMainTagInfo> items;
+}
+
+class RawPluginMainTagInfo {
+  String title;
+  String url;
 }
 
 class RawPluginMainSectionInfo {

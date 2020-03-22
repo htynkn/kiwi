@@ -9,6 +9,8 @@ import 'package:kiwi/core/plugin_manager.dart';
 import 'package:kiwi/domain/comic_book.dart';
 import 'package:kiwi/domain/comic_detail.dart';
 import 'package:kiwi/domain/comic_section.dart';
+import 'package:kiwi/domain/comic_tag.dart';
+import 'package:kiwi/domain/comic_tags.dart';
 import 'package:kiwi/domain/raw_plugin_info.dart';
 import 'package:kiwi/exception/plugin_exception.dart';
 import 'package:ms_dart/ms_dart.dart';
@@ -25,22 +27,21 @@ class DefaultPluginExecutor {
 
   DefaultPluginExecutor(this.manager, this.httpService, this.jsEngineService);
 
-  Future<RawPluginInfo> getRawInfoContent(String xmlContent){
-    var rawPluginInfo = RawPluginInfo();
-
-    return parsePlugin(xmlContent, rawPluginInfo);
+  Future<RawPluginInfo> getRawInfoContent(String xmlContent) {
+    return parsePlugin(xmlContent);
   }
 
   Future<RawPluginInfo> getRawInfoBy(int id) async {
     var plugin = await manager.getById(id);
-    var rawPluginInfo = RawPluginInfo();
 
     var xmlContent = plugin.content;
 
-    return parsePlugin(xmlContent, rawPluginInfo);
+    return parsePlugin(xmlContent);
   }
 
-  Future<RawPluginInfo> parsePlugin(String xmlContent, RawPluginInfo rawPluginInfo) {
+  Future<RawPluginInfo> parsePlugin(String xmlContent) {
+    var rawPluginInfo = RawPluginInfo();
+
     var document = xml.parse(xmlContent);
 
     var sited = _findFirstElement(document, "sited", alias: "site");
@@ -90,6 +91,42 @@ class DefaultPluginExecutor {
     homeInfo.url = hots.getAttribute("url");
 
     rawPluginInfo.main.home = homeInfo;
+
+    if (_hasElement(home, "tags")) {
+      var tags = _findFirstElement(home, "tags");
+
+      var tagsInfo = RawPluginMainTagsInfo();
+
+      tagsInfo.title = tags.getAttribute("title");
+      tagsInfo.tags = List();
+      tagsInfo.items = List();
+
+      if (_hasElement(tags, "tags")) {
+        for (var tag in tags.findElements("tags")) {
+          var tagInfo = RawPluginMainHostInfo();
+
+          tagInfo.parse = tag.getAttribute("parse");
+          tagInfo.cache = tag.getAttribute("cache");
+          tagInfo.url = tag.getAttribute("url");
+          tagInfo.method = tag.getAttribute("method");
+
+          tagsInfo.tags.add(tagInfo);
+        }
+      }
+
+      if (_hasElement(tags, "item")) {
+        for (var item in tags.findElements("item")) {
+          var itemInfo = RawPluginMainTagInfo();
+
+          itemInfo.url = item.getAttribute("url");
+          itemInfo.title = item.getAttribute("title");
+
+          tagsInfo.items.add(itemInfo);
+        }
+      }
+
+      rawPluginInfo.main.tags = tagsInfo;
+    }
 
     var book = _findFirstElement(main, "book");
 
@@ -309,6 +346,47 @@ class DefaultPluginExecutor {
     }
 
     return Future.value(comicDetail);
+  }
+
+  Future<ComicTags> getComicTags(RawPluginInfo pluginInfo) async {
+    var tags = ComicTags();
+
+    var rawTags = pluginInfo.main.tags;
+    tags.title = rawTags.title;
+    tags.list = List();
+
+    for (var tag in rawTags.tags) {
+      var code = pluginInfo.script.code;
+
+      for (var url in pluginInfo.script.requireList) {
+        var requireScript = await httpService.get(url, ua: pluginInfo.meta.ua);
+
+        code = requireScript + ";" + code;
+      }
+
+      var url = tag.url;
+
+      var html = await httpService.get(url,
+          ua: pluginInfo.meta.ua, duration: _getDuration(tag.cache));
+
+      Map<String, String> context = HashMap();
+      context.putIfAbsent("html", () => html);
+      context.putIfAbsent("url", () => url);
+
+      var result = await jsEngineService.executeJsWithContext(
+          code, tag.parse + "(url,html)", context);
+    }
+
+    for (var item in rawTags.items) {
+      var tag = ComicTag();
+
+      tag.name = item.title;
+      tag.url = item.url;
+
+      tags.list.add(tag);
+    }
+
+    return Future.value(tags);
   }
 
   xml.XmlElement _findFirstElement(xml.XmlParent xmlParent, String name,

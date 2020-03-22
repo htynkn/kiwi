@@ -6,6 +6,9 @@ class ComicBookState implements Cloneable<ComicBookState> {
   String name;
   List<ComicBook> comicBooks;
   bool loading = true;
+  String homeName;
+  String tagName;
+  int tabIndex = 0;
 
   @override
   ComicBookState clone() {
@@ -13,6 +16,9 @@ class ComicBookState implements Cloneable<ComicBookState> {
       ..pluginId = pluginId
       ..name = name
       ..loading = loading
+      ..homeName = homeName
+      ..tagName = tagName
+      ..tabIndex = tabIndex
       ..comicBooks = comicBooks;
   }
 }

@@ -2,11 +2,10 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_networkimage/provider.dart';
 import 'package:flutter_advanced_networkimage/transition.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kiwi/component/loading.dart';
-import 'package:kiwi/domain/comic_book.dart';
 import 'package:kiwi/page/comic_book/action.dart';
 import 'package:logger_flutter/logger_flutter.dart';
+import 'package:quiver/strings.dart';
 
 import 'state.dart';
 
@@ -14,7 +13,6 @@ final ratio = 3 / 5;
 
 Widget buildView(
     ComicBookState state, Dispatch dispatch, ViewService viewService) {
-  var books = state.comicBooks;
   var theme = Theme.of(viewService.context);
 
   return Scaffold(
@@ -22,13 +20,57 @@ Widget buildView(
         title: Text(state.name),
         backgroundColor: theme.primaryColor,
       ),
+      bottomNavigationBar: renderNavigationBar(state, dispatch),
       body: state.loading
           ? Loading.normalLoading(viewService)
-          : renderComicBooks(state, books, theme, viewService, dispatch));
+          : state.tabIndex == 0
+              ? renderComicHomePage(state, theme, viewService, dispatch)
+              : renderComicTagPage(state, theme, viewService, dispatch));
 }
 
-Container renderComicBooks(ComicBookState state, List<ComicBook> books,
-    ThemeData theme, ViewService viewService, Dispatch dispatch) {
+renderComicTagPage(
+    ComicBookState state, ThemeData theme, ViewService viewService, dispatch) {
+  return Container(
+    child: Text("tags"),
+  );
+}
+
+renderNavigationBar(ComicBookState state, dispatch) {
+  final List<BottomNavigationBarItem> barItemList = List();
+
+  if (isNotBlank(state.homeName)) {
+    barItemList.add(BottomNavigationBarItem(
+        icon: Icon(Icons.home), title: Text(state.homeName)));
+  }
+  if (isNotBlank(state.tagName)) {
+    barItemList.add(BottomNavigationBarItem(
+        icon: Icon(Icons.tab), title: Text(state.tagName)));
+  }
+
+  if (barItemList.length >= 2) {
+    return BottomNavigationBar(
+      items: barItemList,
+      currentIndex: state.tabIndex,
+      onTap: (value) {
+        dispatch(ComicBookActionCreator.changeTabIndex(value));
+      },
+    );
+  } else {
+    return null;
+  }
+}
+
+renderComicHomePage(
+    ComicBookState state, ThemeData theme, ViewService viewService, dispatch) {
+  return Container(
+    child: renderComicBooks(state, theme, viewService, dispatch),
+  );
+}
+
+Container renderComicBooks(ComicBookState state, ThemeData theme,
+    ViewService viewService, Dispatch dispatch) {
+  var books = state.comicBooks;
+
   List<Widget> widgets = List();
 
   for (var book in books) {

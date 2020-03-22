@@ -32,9 +32,13 @@ _startLoad(Action action, Context<ComicBookState> ctx) async {
 
     var raw = await defaultPluginExecutor.getRawInfoBy(ctx.state.pluginId);
 
+    var tagName = raw.main.tags?.title;
+    var homeName = raw.main.home?.title;
+
     var list = await defaultPluginExecutor.getComicBooks(raw);
 
-    ctx.dispatch(ComicBookActionCreator.finishLoad(raw.meta.title, list));
+    ctx.dispatch(ComicBookActionCreator.finishLoad(
+        raw.meta.title, homeName, tagName, list));
   } catch (e) {
     commonErrorHandler(e, ctx);
   }
