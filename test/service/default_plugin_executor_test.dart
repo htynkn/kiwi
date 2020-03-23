@@ -153,14 +153,10 @@ void main() {
       var tohomh123Html = await TestUtil.loadFile("tohomh123.html");
 
       when(mockHttpService.get(argThat(equals("https://www.tohomh123.com/")),
-              ua: anyNamed("ua"), duration: anyNamed("duration")))
+              ua: anyNamed("ua"),
+              duration: anyNamed("duration"),
+              encode: anyNamed("encode")))
           .thenAnswer((_) => Future.value(tohomh123Html));
-
-      var tohomh123TagsHtml = await TestUtil.loadFile("tohomh123-tags.html");
-
-      when(mockHttpService.get(argThat(equals("https://www.tohomh123.com/f-1------updatetime--1.html")),
-          ua: anyNamed("ua"), duration: anyNamed("duration")))
-          .thenAnswer((_) => Future.value(tohomh123TagsHtml));
     });
 
     tearDown(() {
