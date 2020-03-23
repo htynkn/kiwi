@@ -9,6 +9,8 @@ import 'package:quiver/strings.dart';
 
 import 'state.dart';
 
+final ratio = 3 / 5;
+
 Widget buildView(
     ComicBookState state, Dispatch dispatch, ViewService viewService) {
   var theme = Theme.of(viewService.context);
