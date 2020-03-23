@@ -180,18 +180,14 @@ class DefaultPluginExecutor {
   }
 
   Future<List<ComicBook>> getComicBooks(RawPluginInfo pluginInfo) async {
-    var code = pluginInfo.script.code;
-
-    for (var url in pluginInfo.script.requireList) {
-      var requireScript = await httpService.get(url, ua: pluginInfo.meta.ua);
-
-      code = requireScript + ";" + code;
-    }
+    String code = await _retrieveScriptCode(pluginInfo);
 
     var home = pluginInfo.main.home;
 
     var html = await httpService.get(home.url,
-        ua: pluginInfo.meta.ua, duration: _getDuration(home.cache));
+        ua: pluginInfo.meta.ua,
+        duration: _getDuration(home.cache),
+        encode: pluginInfo.meta.encode);
 
     Map<String, String> context = HashMap();
     context.putIfAbsent("html", () => html);
@@ -206,13 +202,7 @@ class DefaultPluginExecutor {
   }
 
   getSections(RawPluginInfo pluginInfo, String url, String sectionName) async {
-    var code = pluginInfo.script.code;
-
-    for (var url in pluginInfo.script.requireList) {
-      var requireScript = await httpService.get(url, ua: pluginInfo.meta.ua);
-
-      code = requireScript + ";" + code;
-    }
+    String code = await _retrieveScriptCode(pluginInfo);
 
     var book = pluginInfo.main.book;
 
@@ -225,7 +215,9 @@ class DefaultPluginExecutor {
     }
 
     var html = await httpService.get(url,
-        ua: pluginInfo.meta.ua, duration: _getDuration(book.cache));
+        ua: pluginInfo.meta.ua,
+        duration: _getDuration(book.cache),
+        encode: pluginInfo.meta.encode);
 
     Map<String, String> context = HashMap();
     context.putIfAbsent("html", () => html);
@@ -255,7 +247,9 @@ class DefaultPluginExecutor {
 
       if (isNotEmpty(book.sections.parseUrl)) {
         var html = await httpService.get(url,
-            ua: pluginInfo.meta.ua, duration: _getDuration(book.cache));
+            ua: pluginInfo.meta.ua,
+            duration: _getDuration(book.cache),
+            encode: pluginInfo.meta.encode);
         Map<String, String> context = HashMap();
         context.putIfAbsent("url", () => url);
         context.putIfAbsent("html", () => html);
@@ -270,7 +264,9 @@ class DefaultPluginExecutor {
 
       for (var sectionUrl in sectionsUrl) {
         var html = await httpService.get(sectionUrl,
-            ua: pluginInfo.meta.ua, duration: _getDuration(book.cache));
+            ua: pluginInfo.meta.ua,
+            duration: _getDuration(book.cache),
+            encode: pluginInfo.meta.encode);
         Map<String, String> context = HashMap();
         context.putIfAbsent("url", () => sectionUrl);
         context.putIfAbsent("html", () => html);
@@ -300,7 +296,8 @@ class DefaultPluginExecutor {
     var code = pluginInfo.script.code;
 
     for (var url in pluginInfo.script.requireList) {
-      var requireScript = await httpService.get(url, ua: pluginInfo.meta.ua);
+      var requireScript = await httpService.get(url,
+          ua: pluginInfo.meta.ua, encode: pluginInfo.meta.encode);
 
       code = requireScript + ";" + code;
     }
@@ -310,7 +307,9 @@ class DefaultPluginExecutor {
     List<String> urls = List();
     if (isNotEmpty(section.parseUrl)) {
       var html = await httpService.get(url,
-          ua: pluginInfo.meta.ua, duration: _getDuration(section.cache));
+          ua: pluginInfo.meta.ua,
+          duration: _getDuration(section.cache),
+          encode: pluginInfo.meta.encode);
 
       Map<String, String> context = HashMap();
       context.putIfAbsent("html", () => html);
@@ -331,7 +330,9 @@ class DefaultPluginExecutor {
 
     for (var singleUrl in urls) {
       var html = await httpService.get(singleUrl,
-          ua: pluginInfo.meta.ua, duration: _getDuration(section.cache));
+          ua: pluginInfo.meta.ua,
+          duration: _getDuration(section.cache),
+          encode: pluginInfo.meta.encode);
 
       Map<String, String> context = HashMap();
       context.putIfAbsent("html", () => html);
@@ -359,7 +360,8 @@ class DefaultPluginExecutor {
       var code = pluginInfo.script.code;
 
       for (var url in pluginInfo.script.requireList) {
-        var requireScript = await httpService.get(url, ua: pluginInfo.meta.ua);
+        var requireScript = await httpService.get(url,
+            ua: pluginInfo.meta.ua, encode: pluginInfo.meta.encode);
 
         code = requireScript + ";" + code;
       }
@@ -367,7 +369,9 @@ class DefaultPluginExecutor {
       var url = tag.url;
 
       var html = await httpService.get(url,
-          ua: pluginInfo.meta.ua, duration: _getDuration(tag.cache));
+          ua: pluginInfo.meta.ua,
+          duration: _getDuration(tag.cache),
+          encode: pluginInfo.meta.encode);
 
       Map<String, String> context = HashMap();
       context.putIfAbsent("html", () => html);
@@ -426,5 +430,16 @@ class DefaultPluginExecutor {
       } catch (e) {}
     }
     return Duration(minutes: defaultDurationInMin);
+  }
+
+  Future<String> _retrieveScriptCode(RawPluginInfo pluginInfo) async {
+    var code = pluginInfo.script.code;
+
+    for (var url in pluginInfo.script.requireList) {
+      var requireScript = await httpService.get(url, ua: pluginInfo.meta.ua);
+
+      code = requireScript + ";" + code;
+    }
+    return code;
   }
 }

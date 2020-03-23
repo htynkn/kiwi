@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:cookie_jar/cookie_jar.dart';
@@ -6,6 +7,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:firebase_performance/firebase_performance.dart';
 import 'package:fish_redux/fish_redux.dart';
+import 'package:gbk2utf8/gbk2utf8.dart';
 import 'package:kiwi/core/analysis_service.dart';
 import 'package:kiwi/core/http_service.dart';
 import 'package:kiwi/core/logging_service.dart';
@@ -31,7 +33,8 @@ class DioHttpService extends HttpService {
       {String ua,
       Duration duration = const Duration(minutes: 1),
       String referer,
-      String requestedWith}) async {
+      String requestedWith,
+      String encode}) async {
     var uuid = await analysisService.startHttpMetric(url, HttpMethod.Get);
 
     try {
@@ -53,6 +56,15 @@ class DioHttpService extends HttpService {
 
       cacheOption.sendTimeout = 3000;
       cacheOption.receiveTimeout = 3000;
+
+      cacheOption.responseDecoder = (List<int> responseBytes,
+          RequestOptions options, ResponseBody responseBody) {
+        if (isNotBlank(encode) && encode.startsWith("gb")) {
+          return gbk.decode(responseBytes);
+        } else {
+          return Utf8Decoder().convert(responseBytes);
+        }
+      };
 
       Response response = await dio.get(url, options: cacheOption);
 
