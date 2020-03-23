@@ -39,6 +39,9 @@ Widget buildView(
           child: Row(
             children: <Widget>[
               Text("选择文件"),
+              Expanded(
+                child: SizedBox(),
+              ),
               RaisedButton(
                   child: Text("打开"),
                   onPressed: () async {
@@ -48,14 +51,13 @@ Widget buildView(
                     if (permission != PermissionStatus.granted) {
                       await PermissionHandler()
                           .requestPermissions([PermissionGroup.storage]);
-                      File file = await FilePicker.getFile(
-                          type: FileType.custom, fileExtension: 'xml');
-
-                      dispatch(InstallActionCreator.install({
-                        "remoteUrl": file.path,
-                        "name": ""
-                      }));
                     }
+
+                    File file = await FilePicker.getFile(
+                        type: FileType.custom, fileExtension: 'xml');
+
+                    dispatch(InstallActionCreator.install(
+                        {"remoteUrl": file.path, "name": ""}));
                   })
             ],
           ),

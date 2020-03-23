@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:kiwi/domain/comic_book.dart';
+import 'package:kiwi/domain/comic_tags.dart';
 
 enum ComicBookAction { startLoad, finishLoad, jumpToSection, changeTabIndex }
 
@@ -8,12 +9,13 @@ class ComicBookActionCreator {
     return const Action(ComicBookAction.startLoad);
   }
 
-  static Action finishLoad(
-      String name, String homeName, String tagName, List<ComicBook> list) {
+  static Action finishLoad(String name, String homeName, String tagName,
+      List<ComicBook> list, ComicTags tags) {
     return Action(ComicBookAction.finishLoad, payload: {
       "name": name,
       "homeName": homeName,
       "tagName": tagName,
+      "tags": tags,
       "books": list
     });
   }
