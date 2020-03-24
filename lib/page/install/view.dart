@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kiwi/component/loading.dart';
 import 'package:kiwi/domain/enum/plugin_provider_type.dart';
 import 'package:kiwi/page/install/action.dart';
@@ -56,8 +57,18 @@ Widget buildView(
                     File file = await FilePicker.getFile(
                         type: FileType.custom, fileExtension: 'xml');
 
-                    dispatch(InstallActionCreator.install(
-                        {"remoteUrl": file.path, "name": ""}));
+                    if (file != null) {
+                      dispatch(InstallActionCreator.install(
+                          {"remoteUrl": file.path, "name": ""}));
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "没有选择文件",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIos: 1,
+                          textColor: Theme.of(viewService.context).errorColor,
+                          fontSize: 16.0);
+                    }
                   })
             ],
           ),

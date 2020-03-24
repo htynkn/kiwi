@@ -203,7 +203,7 @@ packages:
       name: dio
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "3.0.8"
+    version: "3.0.9"
   dio_cookie_manager:
     dependency: "direct main"
     description:
