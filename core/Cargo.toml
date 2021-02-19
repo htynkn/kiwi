@@ -1,0 +1,11 @@
+[package]
+name = "core"
+version = "0.1.0"
+authors = ["Huang Yunkun <htynkn@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "core"
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
