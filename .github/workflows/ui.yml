@@ -13,6 +13,10 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Decrypt large secret
+        run: ../.github/scripts/decrypt_secret.sh
+        env:
+          LARGE_SECRET_PASSPHRASE: ${{ secrets.LARGE_SECRET_PASSPHRASE }}
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7
         with:
