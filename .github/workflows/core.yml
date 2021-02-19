@@ -14,4 +14,4 @@ jobs:
         with:
           toolchain: stable
       - run: make init
-      - run: make all
+      - run: make android
