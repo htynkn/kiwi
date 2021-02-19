@@ -1,2 +1,0 @@
-ignore:
-  - "lib/service/firebase_analysis_service.dart"

@@ -1,1 +1,0 @@
-class PluginException implements Exception {}
